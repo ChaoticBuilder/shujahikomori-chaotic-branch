@@ -247,8 +247,7 @@ void play_sound_if_no_flag(struct MarioState *m, u32 soundBits, u32 flags) {
 void play_mario_jump_sound(struct MarioState *m) {
     if (!(m->flags & MARIO_MARIO_SOUND_PLAYED)) {
         if (m->action == ACT_TRIPLE_JUMP) {
-            play_sound(SOUND_MARIO_YAHOO_WAHA_YIPPEE + ((gAudioRandom % 5) << 16),
-                       m->marioObj->header.gfx.cameraToObject);
+            play_sound(SOUND_MARIO_YAHA, m->marioObj->header.gfx.cameraToObject);
         } else {
             play_sound(SOUND_MARIO_YAH_WAH_HOO + ((gAudioRandom % 3) << 16),
                        m->marioObj->header.gfx.cameraToObject);
@@ -841,10 +840,7 @@ u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actionArg) {
             break;
 
         case ACT_SLIDE_KICK:
-            m->vel[1] = 12.0f;
-            if (m->forwardVel < 32.0f) {
-                m->forwardVel = 32.0f;
-            }
+            m->vel[1] = 20.0f;
             break;
 
         case ACT_JUMP_KICK:
@@ -921,10 +917,6 @@ u32 set_mario_action_cutscene(struct MarioState *m, u32 action, UNUSED u32 actio
     switch (action) {
         case ACT_EMERGE_FROM_PIPE:
             m->vel[1] = 52.0f;
-            break;
-
-        case ACT_FALL_AFTER_STAR_GRAB:
-            mario_set_forward_vel(m, 0.0f);
             break;
 
         case ACT_SPAWN_SPIN_AIRBORNE:
@@ -1448,6 +1440,8 @@ void update_mario_health(struct MarioState *m) {
                         m->health -= (terrainIsSnow ? 3 : 1);
                     }
 #endif
+                } else {
+                    m->health++;
                 }
             }
         }
@@ -1467,7 +1461,6 @@ void update_mario_health(struct MarioState *m) {
 #ifndef BREATH_METER
         // Play a noise to alert the player when Mario is close to drowning.
         if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300)) {
-            play_sound(SOUND_MOVING_ALMOST_DROWNING, gGlobalSoundSource);
 #if ENABLE_RUMBLE
             if (gRumblePakTimer == 0) {
                 gRumblePakTimer = 36;
@@ -1490,7 +1483,6 @@ void update_mario_breath(struct MarioState *m) {
             m->breath--;
             if (m->breath < 0x300) {
                 // Play a noise to alert the player when Mario is close to drowning.
-                play_sound(SOUND_MOVING_ALMOST_DROWNING, gGlobalSoundSource);
 #if ENABLE_RUMBLE
                 if (gRumblePakTimer == 0) {
                     gRumblePakTimer = 36;

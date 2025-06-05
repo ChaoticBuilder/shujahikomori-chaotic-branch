@@ -178,11 +178,7 @@ s32 intro_regular(void) {
     // "press start to play" when it goes back to the title screen
     // (using SAVE AND QUIT)
     if (sPlayMarioGreeting) {
-        if (gGlobalTimer < 129) {
             play_sound(SOUND_MARIO_HELLO, gGlobalSoundSource);
-        } else {
-            play_sound(SOUND_MARIO_PRESS_START_TO_PLAY, gGlobalSoundSource);
-        }
         sPlayMarioGreeting = FALSE;
     }
     print_intro_text();
@@ -246,7 +242,7 @@ s32 intro_game_over(void) {
  * Plays the casual "It's a me mario" when the game stars.
  */
 s32 intro_play_its_a_me_mario(void) {
-    play_sound(SOUND_MENU_COIN_ITS_A_ME_MARIO, gGlobalSoundSource);
+    play_sound(SOUND_GENERAL_COIN, gGlobalSoundSource);
     return LEVEL_NONE + 1;
 }
 
