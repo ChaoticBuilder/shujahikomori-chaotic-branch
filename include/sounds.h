@@ -241,6 +241,7 @@ enum SoundBank {
 // A random number 0-4 is added to the sound ID before playing, producing one of
 // Yahoo! (60% chance), Waha! (20%), or Yippee! (20%).
 #define SOUND_MARIO_YAHOO_WAHA_YIPPEE            /* 0x242B8081 */ SOUND_ARG_LOAD(SOUND_BANK_VOICE,    0x2B, 0x80, SOUND_NO_PRIORITY_LOSS | SOUND_DISCRETE)
+#define SOUND_MARIO_YAHA                         /* 0x242B8081 */ SOUND_ARG_LOAD(SOUND_BANK_VOICE,    0x2E, 0x80, SOUND_NO_PRIORITY_LOSS | SOUND_DISCRETE)
 
 #define SOUND_MARIO_DOH                          /* 0x24308081 */ SOUND_ARG_LOAD(SOUND_BANK_VOICE,    0x30, 0x80, SOUND_NO_PRIORITY_LOSS | SOUND_DISCRETE)
 #define SOUND_MARIO_GAME_OVER                    /* 0x2431FF81 */ SOUND_ARG_LOAD(SOUND_BANK_VOICE,    0x31, 0xFF, SOUND_NO_PRIORITY_LOSS | SOUND_DISCRETE)
