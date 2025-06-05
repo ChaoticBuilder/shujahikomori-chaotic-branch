@@ -7,7 +7,7 @@
 /**
  * The size of the master display list (gDisplayListHead). 6400 is vanilla.
  */
-#define GFX_POOL_SIZE 10000
+#define GFX_POOL_SIZE 25600
 
 /**
  * Causes the global light direction to be in world space,
@@ -20,12 +20,12 @@
 /**
  * Show a watermark on the title screen that reads "Made with HackerSM64", instead of the copyright message.
  */
-#define INTRO_CREDIT
+// #define INTRO_CREDIT
 
 /**
  * Spawns floombas on the title screen.
  */
-#define INTRO_FLOOMBAS
+// #define INTRO_FLOOMBAS
 
 /**
  * Enables widescreen (16:9) support.
@@ -87,7 +87,7 @@
 /**
  * Use 64x64 quarter shadow textures (Vanilla are 16x16).
  */
-#define HD_SHADOWS
+// #define HD_SHADOWS
 
 /**
  * Makes certain objects (mainly trees) transparent when the camera gets close.
@@ -97,7 +97,7 @@
 /**
  * Fixes the game reading the ia8 burn smoke texture as an rgba16.
  */
-#define BURN_SMOKE_FIX
+// #define BURN_SMOKE_FIX
 
 /**
  * Disables the fix to Koopa's unshelled model.

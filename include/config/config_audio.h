@@ -12,7 +12,7 @@
 /**
  * Red coins should use the unchanging JP sound effect.
  */
-// #define JP_RED_COIN_SOUND
+#define JP_RED_COIN_SOUND
 
 /** 
  * In vanilla, Mario's sounds are pitch shifted in real time in order to maintain a sense of consistency. This can be annoying when replacing Mario's sounds.
@@ -42,7 +42,7 @@
  * Lower values may cause problems with streamed audio if a sequence used for it is missing channel priority data.
  * Vanilla by default only generally allocates 16 or 20 notes at once. Memory usage is always determined by the largest of the two values here (~7200 bytes per US/JP note).
  */
-#define MAX_SIMULTANEOUS_NOTES_EMULATOR 40
+#define MAX_SIMULTANEOUS_NOTES_EMULATOR 32
 #define MAX_SIMULTANEOUS_NOTES_CONSOLE 24
 
 /** 
