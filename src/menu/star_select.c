@@ -50,40 +50,28 @@ static s8 sSelectedActIndex = 0;
 // Excluding the next star, it doesn't count other transparent stars.
 static s8 sSelectableStarIndex = 0;
 
-// Act Selector menu timer that keeps counting until you choose an act.
-static s32 sActSelectorMenuTimer = 0;
-
 /**
  * Act Selector Star Type Loop Action
  * Defines a select type for a star in the act selector.
  */
 void bhv_act_selector_star_type_loop(void) {
+    f32 size = 1.0f;
     switch (gCurrentObject->oStarSelectorType) {
         // If a star is not selected, don't rotate or change size
         case STAR_SELECTOR_NOT_SELECTED:
-            gCurrentObject->oStarSelectorSize -= 0.1f;
-            if (gCurrentObject->oStarSelectorSize < 1.0f) {
-                gCurrentObject->oStarSelectorSize = 1.0f;
-            }
-            gCurrentObject->oFaceAngleYaw = 0;
+            gCurrentObject->oAnimState = 0;
             break;
         // If a star is selected, rotate and slightly increase size
         case STAR_SELECTOR_SELECTED:
-            gCurrentObject->oStarSelectorSize += 0.1f;
-            if (gCurrentObject->oStarSelectorSize > 1.3f) {
-                gCurrentObject->oStarSelectorSize = 1.3f;
-            }
-            gCurrentObject->oFaceAngleYaw += 0x800;
+            size = 1.25f;
+            gCurrentObject->oAnimState++;
             break;
         // If the 100 coin star is selected, rotate
         case STAR_SELECTOR_100_COINS:
-            gCurrentObject->oFaceAngleYaw += 0x800;
             break;
     }
     // Scale act selector stars depending of the type selected
-    cur_obj_scale(gCurrentObject->oStarSelectorSize);
-    // Unused timer, only referenced here. Probably replaced by sActSelectorMenuTimer
-    gCurrentObject->oStarSelectorTimer++;
+    cur_obj_scale(size);
 }
 
 /**
@@ -151,12 +139,6 @@ void bhv_act_selector_init(void) {
         sInitSelectedActNum = sVisibleStars;
     }
 
-    //! Useless, since sInitSelectedActNum has already been set in this
-    //! scenario by the code that shows the next uncollected star.
-    if (sObtainedStars == 0) {
-        sInitSelectedActNum = 1;
-    }
-
     // Render star selector objects
 #ifdef WIDE
     if (gConfig.widescreen) {
@@ -183,7 +165,6 @@ void bhv_act_selector_init(void) {
     }
 #endif
 
-    render_100_coin_star(stars);
 }
 
 /**
@@ -409,7 +390,6 @@ s32 lvl_init_act_selector_values_and_stars(UNUSED s32 arg, UNUSED s32 unused) {
     sLoadedActNum = 0;
     sInitSelectedActNum = 0;
     sVisibleStars = 0;
-    sActSelectorMenuTimer = 0;
     sObtainedStars =
         save_file_get_course_star_count(gCurrSaveFileNum - 1, COURSE_NUM_TO_INDEX(gCurrCourseNum));
 
@@ -426,7 +406,6 @@ s32 lvl_init_act_selector_values_and_stars(UNUSED s32 arg, UNUSED s32 unused) {
  * Also updates objects and returns act number selected after is chosen.
  */
 s32 lvl_update_obj_and_load_act_button_actions(UNUSED s32 arg, UNUSED s32 unused) {
-    if (sActSelectorMenuTimer > 10) {
         // If any of these buttons are pressed, play sound and go to course act
         if ((gPlayer1Controller->buttonPressed & (A_BUTTON | START_BUTTON | B_BUTTON | Z_TRIG))) {
             play_sound(SOUND_MENU_STAR_SOUND_LETS_A_GO, gGlobalSoundSource);
@@ -440,10 +419,8 @@ s32 lvl_update_obj_and_load_act_button_actions(UNUSED s32 arg, UNUSED s32 unused
                 sLoadedActNum = sInitSelectedActNum;
             }
             gDialogCourseActNum = sSelectedActIndex + 1;
-        }
     }
 
     area_update_objects();
-    sActSelectorMenuTimer++;
     return sLoadedActNum;
 }

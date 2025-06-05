@@ -59,9 +59,7 @@ void set_y_home_to_pos(void) {
 }
 
 void slow_star_rotation(void) {
-    if (o->oAngleVelYaw > 0x400) {
-        o->oAngleVelYaw -= 0x40;
-    }
+    if (gGlobalTimer % 2 == 0) o->oAnimState++;
 }
 
 void bhv_spawned_star_loop(void) {
@@ -70,7 +68,6 @@ void bhv_spawned_star_loop(void) {
             cutscene_object(CUTSCENE_STAR_SPAWN, o);
             set_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
             o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
-            o->oAngleVelYaw = 0x800;
             if (o->oBehParams2ndByte == SPAWN_STAR_POS_CUTSCENE_BP_SPAWN_AT_MARIO) {
                 spawned_star_set_target_above_mario();             
             } else {
@@ -109,11 +106,10 @@ void bhv_spawned_star_loop(void) {
         }
     } else { // SPAWN_STAR_POS_CUTSCENE_ACT_SLOW_STAR_ROTATION
         set_sparkle_spawn_star_hitbox();
-        slow_star_rotation();
     }
 
     cur_obj_move_using_fvel_and_gravity();
-    o->oFaceAngleYaw += o->oAngleVelYaw;
+    if (gGlobalTimer % 2 == 0) o->oAnimState++;
     o->oInteractStatus = INT_STATUS_NONE;
 }
 
