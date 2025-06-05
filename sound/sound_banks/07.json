@@ -43,7 +43,7 @@
         "inst0": {
             "release_rate": 29,
             "envelope": "envelope0",
-            "sound": "00"
+            "sound": "00.custom"
         },
         "inst1": {
             "release_rate": 48,
@@ -98,7 +98,7 @@
         "inst11": {
             "release_rate": 208,
             "envelope": "envelope5",
-            "sound": "0B"
+            "sound": "0B.custom"
         },
         "inst12": {
             "release_rate": 208,
