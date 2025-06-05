@@ -840,7 +840,7 @@ u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actionArg) {
             break;
 
         case ACT_SLIDE_KICK:
-            m->vel[1] = 20.0f;
+            m->vel[1] = 24.0f;
             break;
 
         case ACT_JUMP_KICK:
