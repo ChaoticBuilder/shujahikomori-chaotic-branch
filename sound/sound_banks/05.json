@@ -24,7 +24,7 @@
         "inst1": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "0F"
+            "sound": "0F.custom"
         },
         "inst2": {
             "release_rate": 208,

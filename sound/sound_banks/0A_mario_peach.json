@@ -13,12 +13,12 @@
         "inst0": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "00_mario_waaaooow"
+            "sound": "00_mario_waaaooow.custom"
         },
         "inst1": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "01_mario_hoohoo"
+            "sound": "01_mario_hoohoo.custom"
         },
         "inst2": {
             "release_rate": 208,
@@ -28,12 +28,12 @@
         "inst3": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "03_mario_dying"
+            "sound": "03_mario_dying.custom"
         },
         "inst4": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "04_mario_on_fire"
+            "sound": "04_mario_on_fire.custom"
         },
         "inst5": {
             "release_rate": 208,
@@ -53,7 +53,7 @@
         "inst8": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "08_mario_punch_yah"
+            "sound": "08_mario_punch_yah.custom"
         },
         "inst9": {
             "release_rate": 208,
