@@ -1554,19 +1554,19 @@ s32 act_slide_kick(struct MarioState *m) {
     switch (m->actionArg) {
         case 0:
             play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_HOOHOO);
-            set_mario_animation(m, MARIO_ANIM_SLOW_LONGJUMP); // MARIO_GIGALEAK_SLIDEKICK_START
+            set_mario_animation(m, MARIO_GIGALEAK_SLIDEKICK_START);
             if (is_anim_past_end(m)) {
                 m->actionArg = 1;
             }
             break;
         case 1:
-            set_mario_animation(m, MARIO_ANIM_START_GROUND_POUND);
+            set_mario_animation(m, MARIO_GIGALEAK_SLIDEKICKING);
             if (is_anim_past_end(m)) {
                 m->actionArg = 2;
             }
             break;
         case 2:
-            set_mario_animation(m, MARIO_ANIM_SLIDE);
+            set_mario_animation(m, MARIO_GIGALEAK_SLIDEKICK_END);
             break;
     }
 
