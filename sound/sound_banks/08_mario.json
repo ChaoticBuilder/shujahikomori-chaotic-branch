@@ -13,12 +13,12 @@
         "inst0": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "00_mario_jump_hoo"
+            "sound": "00_mario_jump_hoo.custom"
         },
         "inst1": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "01_mario_jump_wah"
+            "sound": "01_mario_jump_wah.custom"
         },
         "inst2": {
             "release_rate": 208,
@@ -33,17 +33,17 @@
         "inst4": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "04_mario_yahoo"
+            "sound": "04_mario_yahoo.custom"
         },
         "inst5": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "05_mario_uh"
+            "sound": "05_mario_uh.custom"
         },
         "inst6": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "06_mario_hrmm"
+            "sound": "06_mario_hrmm.custom"
         },
         "inst7": {
             "release_rate": 208,
@@ -53,22 +53,22 @@
         "inst8": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "08_mario_whoa"
+            "sound": "08_mario_whoa.custom"
         },
         "inst9": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "09_mario_eeuh"
+            "sound": "09_mario_eeuh.custom"
         },
         "inst10": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "0A_mario_attacked"
+            "sound": "0A_mario_attacked.custom"
         },
         "inst11": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "0B_mario_ooof"
+            "sound": "0B_mario_ooof.custom"
         },
         "inst12": {
             "release_rate": 208,
