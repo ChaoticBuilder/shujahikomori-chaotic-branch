@@ -941,7 +941,7 @@ s32 act_ground_pound(struct MarioState *m) {
         if (m->actionTimer == 0) {
             play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
             mario_set_forward_vel(m, 0.0f);
-            m->vel[1] = 0.0f;
+            m->vel[1] = -16.0f;
         }
 
         m->actionTimer++;
