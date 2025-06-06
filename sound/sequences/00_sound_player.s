@@ -2130,8 +2130,7 @@ chan_end
 
 .layer_C5A:
 .layer_C5C:
-layer_portamento_mario 0x82, 39, 200
-layer_note1_mario 38, 0x24, 120
+layer_note1 44, 0x24, 127
 layer_end
 
 .sound_mario_hoohoo:
