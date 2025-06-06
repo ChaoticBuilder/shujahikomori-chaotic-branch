@@ -425,9 +425,9 @@ void render_debug_mode(void) {
  * Renders the amount of coins collected.
  */
 void render_hud_coins(void) {
-    print_text(HUD_COINS_X, (HUD_TOP_Y - 20), "$"); // 'Coin' glyph
-    print_text((HUD_COINS_X + 16), (HUD_TOP_Y - 20), "*"); // 'X' glyph
-    print_text_fmt_int((HUD_COINS_X + 30), (HUD_TOP_Y - 20), "%02d", gHudDisplay.coins);
+    print_text(HUD_COINS_X, (HUD_TOP_Y - 18), "$"); // 'Coin' glyph
+    print_text((HUD_COINS_X + 16), (HUD_TOP_Y - 18), "*"); // 'X' glyph
+    print_text_fmt_int((HUD_COINS_X + 30), (HUD_TOP_Y - 18), "%02d", gHudDisplay.coins);
 }
 
 /**

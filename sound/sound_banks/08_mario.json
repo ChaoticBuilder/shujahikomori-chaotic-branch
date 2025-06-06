@@ -73,7 +73,7 @@
         "inst12": {
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "0C_mario_here_we_go"
+            "sound": "0C_mario_here_we_go.custom"
         },
         "inst13": {
             "release_rate": 208,
@@ -106,7 +106,7 @@
             "ifdef": ["VERSION_US", "VERSION_EU", "VERSION_SH"],
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "12_mario_hello"
+            "sound": "12_mario_hello.custom"
         },
         "inst19": {
             "ifdef": ["VERSION_US", "VERSION_EU", "VERSION_SH"],
@@ -142,7 +142,7 @@
             "ifdef": ["VERSION_US", "VERSION_EU", "VERSION_SH"],
             "release_rate": 208,
             "envelope": "envelope0",
-            "sound": "18_mario_waha"
+            "sound": "18_mario_waha.custom"
         },
         "inst25": {
             "ifdef": ["VERSION_US", "VERSION_EU", "VERSION_SH"],
