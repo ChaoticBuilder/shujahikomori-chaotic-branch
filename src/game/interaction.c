@@ -744,6 +744,14 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
         g100CoinStarSpawned = TRUE;
     }
 #endif
+#ifdef ENABLE_LIVES
+    if (gMarioState->numCoins >= 100 && gMarioState->numCoins != 1996) {
+        gMarioState->numLives++;
+        play_sound(SOUND_GENERAL_COLLECT_1UP, gGlobalSoundSource);
+        gMarioState->numCoins -= 100;
+        gHudDisplay.coins -= 100;
+    }
+#endif
 #if ENABLE_RUMBLE
     if (obj->oDamageOrCoinValue >= 2) {
         queue_rumble_data(5, 80);
@@ -1086,7 +1094,6 @@ u32 interact_tornado(struct MarioState *m, UNUSED u32 interactType, struct Objec
 
     if (m->action != ACT_TORNADO_TWIRLING && m->action != ACT_SQUISHED) {
         mario_stop_riding_and_holding(m);
-        mario_set_forward_vel(m, 0.0f);
         update_mario_sound_and_camera(m);
 
         obj->oInteractStatus = INT_STATUS_INTERACTED;
@@ -1150,7 +1157,7 @@ u32 interact_strong_wind(struct MarioState *m, UNUSED u32 interactType, struct O
 }
 
 u32 interact_flame(struct MarioState *m, UNUSED u32 interactType, struct Object *obj) {
-    u32 burningAction = ACT_BURNING_JUMP;
+    u32 burningAction = ACT_BURNING_GROUND;
 
     if (!sInvulnerable && !(m->flags & MARIO_METAL_CAP) && !(m->flags & MARIO_VANISH_CAP)
         && !(obj->oInteractionSubtype & INT_SUBTYPE_DELAY_INVINCIBILITY)) {
@@ -1693,7 +1700,6 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
     return FALSE;
 }
 
-#define READ_MASK (INPUT_A_PRESSED | INPUT_B_PRESSED)
 #ifdef EASIER_DIALOG_TRIGGER
 #define SIGN_RANGE DEGREES(90)
 #else
@@ -1713,16 +1719,16 @@ u32 check_read_sign(struct MarioState *m, struct Object *obj) {
 #ifdef DIALOG_INDICATOR
         struct Object *orangeNumber;
         if (obj->behavior == segmented_to_virtual(bhvSignOnWall)) {
-            orangeNumber = spawn_object_relative(ORANGE_NUMBER_A, 0, 180, 32, obj, MODEL_NUMBER, bhvOrangeNumber);
+            orangeNumber = spawn_object_relative(ORANGE_NUMBER_B, 0, 180, 32, obj, MODEL_NUMBER, bhvOrangeNumber);
         } else {
-            orangeNumber = spawn_object_relative(ORANGE_NUMBER_A, 0, 160,  8, obj, MODEL_NUMBER, bhvOrangeNumber);
+            orangeNumber = spawn_object_relative(ORANGE_NUMBER_B, 0, 160,  8, obj, MODEL_NUMBER, bhvOrangeNumber);
         }
         orangeNumber->oHomeX = orangeNumber->oPosX;
         orangeNumber->oHomeZ = orangeNumber->oPosZ;
 #endif
-        if (m->input & READ_MASK) {
+        if (m->input & INPUT_B_PRESSED) {
 #else
-    if ((m->input & READ_MASK) && mario_can_talk(m, 0) && object_facing_mario(m, obj, SIGN_RANGE)) {
+    if ((m->input & INPUT_B_PRESSED) && mario_can_talk(m, 0) && object_facing_mario(m, obj, SIGN_RANGE)) {
         s16 facingDYaw = (s16)(obj->oMoveAngleYaw + 0x8000) - m->faceAngle[1];
         if (facingDYaw >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE) {
 #endif
@@ -1751,16 +1757,16 @@ u32 check_npc_talk(struct MarioState *m, struct Object *obj) {
 #ifdef DIALOG_INDICATOR
         struct Object *orangeNumber;
         if (obj->behavior == segmented_to_virtual(bhvYoshi)) {
-            orangeNumber = spawn_object_relative(ORANGE_NUMBER_A, 0, 256, 64, obj, MODEL_NUMBER, bhvOrangeNumber);
+            orangeNumber = spawn_object_relative(ORANGE_NUMBER_B, 0, 256, 64, obj, MODEL_NUMBER, bhvOrangeNumber);
         } else {
-            orangeNumber = spawn_object_relative(ORANGE_NUMBER_A, 0, 160,  0, obj, MODEL_NUMBER, bhvOrangeNumber);
+            orangeNumber = spawn_object_relative(ORANGE_NUMBER_B, 0, 160,  0, obj, MODEL_NUMBER, bhvOrangeNumber);
         }
         orangeNumber->oHomeX = orangeNumber->oPosX;
         orangeNumber->oHomeZ = orangeNumber->oPosZ;
 #endif
-        if (m->input & READ_MASK) {
+        if (m->input & INPUT_B_PRESSED) {
 #else
-    if ((m->input & READ_MASK) && mario_can_talk(m, 1)) {
+    if ((m->input & INPUT_B_PRESSED) && mario_can_talk(m, 1)) {
         s16 facingDYaw = mario_obj_angle_to_object(m, obj) - m->faceAngle[1];
         if (facingDYaw >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE) {
 #endif

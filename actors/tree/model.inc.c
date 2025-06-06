@@ -4,26 +4,26 @@
 
 // 0x0302DE28
 ALIGNED8 static const Texture tree_seg3_texture_bubbly_left_side[] = {
-#include "actors/tree/tree_left_side.rgba16.inc.c"
+#include "actors/tree/tree_left_side.custom.rgba16.inc.c"
 };
 
 // 0x0302EE28
 ALIGNED8 static const Texture tree_seg3_texture_bubbly_right_side[] = {
-#include "actors/tree/tree_right_side.rgba16.inc.c"
+#include "actors/tree/tree_right_side.custom.rgba16.inc.c"
 };
 
 // 0x0302FE28
 static const Vtx tree_seg3_vertex_bubbly_left_side[] = {
-    {{{  -356,     -9,      0}, 0, {  -796,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     -9,      0}, 0, {   990,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    800,      0}, 0, {   990,   -712}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -372,      0,      0}, 0, {  -200,   2012}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,      0}, 0, {   990,   2012}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    820,      0}, 0, {   990,   -504}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0302FE58
 static const Vtx tree_seg3_vertex_bubbly_right_side[] = {
-    {{{     0,     -9,      0}, 0, {     0,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   358,     -9,      0}, 0, {  1756,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    800,      0}, 0, {     0,   -712}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,      0}, 0, {     0,   2012}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   372,      0,      0}, 0, {  1160,   2012}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    820,      0}, 0, {     0,   -504}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0302FE88 - 0x0302FEB8
@@ -77,7 +77,7 @@ const Gfx tree_seg3_dl_bubbly_transparent[] = {
 
 // 0x0302FF60
 ALIGNED8 static const Texture tree_seg3_texture_pine[] = {
-#include "actors/tree/pine_tree.rgba16.inc.c"
+#include "actors/tree/pine_tree.custom.rgba16.inc.c"
 };
 
 // 0x03030F60
@@ -124,7 +124,7 @@ const Gfx tree_seg3_dl_spiky_transparent[] = {
 
 // 0x03031048
 ALIGNED8 static const Texture tree_seg3_texture_snowy_pine[] = {
-#include "actors/tree/snowy_pine_tree.rgba16.inc.c"
+#include "actors/tree/snowy_pine_tree.custom.rgba16.inc.c"
 };
 
 // 0x03032088 - 0x03032130
