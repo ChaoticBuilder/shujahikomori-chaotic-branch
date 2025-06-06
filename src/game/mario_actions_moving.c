@@ -356,11 +356,11 @@ void update_shell_speed(struct MarioState *m) {
     }
 
     if (m->forwardVel <= 0.0f) {
-        m->forwardVel += 0.5f;
+        m->forwardVel += 0.75f;
     } else if (m->forwardVel <= targetSpeed) {
-        m->forwardVel += 0.5f;
+        m->forwardVel += 0.75f;
     } else if (m->floor->normal.y >= 0.95f) {
-        m->forwardVel -= 0.5f;
+        m->forwardVel -= 0.75f;
     }
 
     //! No backward speed cap (shell hyperspeed)
@@ -433,12 +433,12 @@ void update_walking_speed(struct MarioState *m) {
 
     if (m->forwardVel <= 0.0f) {
         // Slow down if moving backwards
-        m->forwardVel += 0.5f;
+        m->forwardVel += 0.75f;
     } else if (m->forwardVel <= targetSpeed) {
         // If accelerating
-        m->forwardVel += 0.5f;
+        m->forwardVel += 0.75f;
     } else if (m->floor->normal.y >= 0.95f) {
-        m->forwardVel -= 0.5f;
+        m->forwardVel -= 0.75f;
     }
 
     if (m->forwardVel > 48.0f) {
