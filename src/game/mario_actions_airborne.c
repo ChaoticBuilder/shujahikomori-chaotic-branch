@@ -673,17 +673,17 @@ s32 act_twirling(struct MarioState *m) {
     s16 startTwirlYaw = m->twirlYaw;
     s16 yawVelTarget;
 
-#ifdef Z_TWIRL
-    if (m->input & INPUT_Z_DOWN) {
-        yawVelTarget = 0x2800;
-    } else
-#endif
-
     if (m->input & INPUT_A_DOWN) {
         yawVelTarget = 0x2000;
     } else {
         yawVelTarget = 0x1800;
     }
+
+#ifdef Z_TWIRL
+    if (m->input & INPUT_Z_DOWN) {
+        yawVelTarget = 0x3000;
+    }
+#endif
 
     m->angleVel[1] = approach_s32_symmetric(m->angleVel[1], yawVelTarget, 0x200);
     m->twirlYaw += m->angleVel[1];
@@ -1620,7 +1620,6 @@ s32 act_slide_kick(struct MarioState *m) {
 
 s32 act_jump_kick(struct MarioState *m) {
     if (m->actionState == ACT_STATE_JUMP_KICK_PLAY_SOUND_AND_ANIM) {
-        play_sound_if_no_flag(m, SOUND_MARIO_PUNCH_HOO, MARIO_ACTION_SOUND_PLAYED);
         m->marioObj->header.gfx.animInfo.animID = -1;
         set_mario_animation(m, MARIO_ANIM_AIR_KICK);
         m->actionState = ACT_STATE_JUMP_KICK_KICKING;

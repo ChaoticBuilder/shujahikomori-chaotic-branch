@@ -2118,7 +2118,6 @@ chan_setlayer 0, .layer_C4E
 chan_end
 
 .layer_C4C:
-layer_transpose_mario -2
 .layer_C4E:
 layer_note1_mario 41, 0x18, 127
 layer_end
@@ -2130,7 +2129,6 @@ chan_setlayer 0, .layer_C5A
 chan_end
 
 .layer_C5A:
-layer_transpose_mario -2
 .layer_C5C:
 layer_portamento_mario 0x82, 39, 200
 layer_note1_mario 38, 0x24, 120

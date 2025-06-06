@@ -571,7 +571,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
 
 void apply_twirl_gravity(struct MarioState *m) {
 #ifdef Z_TWIRL
-    f32 Zmodifier = m->input & INPUT_Z_DOWN ? 4.0f : 1.0f;
+    f32 Zmodifier = m->input & INPUT_Z_DOWN ? 6.0f : 1.0f;
 #endif
     f32 heaviness = 1.0f;
 
