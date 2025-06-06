@@ -14,6 +14,7 @@
 #include "mario_step.h"
 #include "save_file.h"
 #include "rumble_init.h"
+#include "print.h"
 
 #include "config.h"
 
@@ -316,11 +317,11 @@ void update_flying_pitch(struct MarioState *m) {
 }
 
 void update_flying(struct MarioState *m) {
-    if (m->actionTimer >= 3) { // flying spinout bugfix *actually fixed this time I tested it*
+    if (m->actionTimer >= 6) { // flying spinout bugfix *actually fixed this time I tested it*
         update_flying_pitch(m);
         update_flying_yaw(m);
     }
-    if (m->actionTimer < 3) m->actionTimer++;
+    if (m->actionTimer < 6) m->actionTimer++;
 
     if (!(m->flags & MARIO_WING_CAP)) {
         m->forwardVel -= 2.0f * ((f32) m->faceAngle[0] / 0x4000);
