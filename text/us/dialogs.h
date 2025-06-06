@@ -273,8 +273,8 @@ Princess Toadstool"))
 
 DEFINE_DIALOG(DIALOG_021, 1, 2, 95, 200, _("\
 W e l c o m e  t o\n\
-t h e  C a s t l e !\n\
-I t ' s  e x c l u s i v e\n\
+t h e  C a s t l e ,\n\
+i t ' s  e x c l u s i v e\n\
 t o  t h e  s h o w !"))
 
 DEFINE_DIALOG(DIALOG_022, 1, 2, 95, 200, _("\
