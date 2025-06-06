@@ -92,8 +92,8 @@ static Vtx vtx_mario_swimbase0[]={
 };
 
 Gfx RCP_swim_hand_l[]={
-	gsSPLight((&light_mario[2].l[0]),1),
-	gsSPLight((&light_mario[2].a),2),
+    gsSPLightColor(LIGHT_1, 0xffffffff),
+    gsSPLightColor(LIGHT_2, 0x3f3f3fff),
 	gsSPVertex(&vtx_mario_swimbase0[0],14,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(3,0,2,0),
@@ -257,8 +257,8 @@ static Vtx vtx_mario_swimbase3[]={
 };
 
 Gfx RCP_swim_hand_r[]={
-	gsSPLight((&light_mario[2].l[0]),1),
-	gsSPLight((&light_mario[2].a),2),
+    gsSPLightColor(LIGHT_1, 0xffffffff),
+    gsSPLightColor(LIGHT_2, 0x3f3f3fff),
 	gsSPVertex(&vtx_mario_swimbase3[0],14,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(0,2,3,0),
