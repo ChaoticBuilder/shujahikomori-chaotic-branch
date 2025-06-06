@@ -316,11 +316,11 @@ void update_flying_pitch(struct MarioState *m) {
 }
 
 void update_flying(struct MarioState *m) {
-    if (m->actionTimer >= 1) { // flying spinout bugfix *actually fixed this time I tested it*
+    if (m->actionTimer >= 3) { // flying spinout bugfix *actually fixed this time I tested it*
         update_flying_pitch(m);
         update_flying_yaw(m);
     }
-    if (m->actionTimer < 1) m->actionTimer++;
+    if (m->actionTimer < 3) m->actionTimer++;
 
     if (!(m->flags & MARIO_WING_CAP)) {
         m->forwardVel -= 2.0f * ((f32) m->faceAngle[0] / 0x4000);
@@ -1291,7 +1291,7 @@ s32 act_air_hit_wall(struct MarioState *m) {
             return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
         }
     } else if (m->forwardVel >= 38.0f) {
-        m->wallKickTimer = 5;
+        m->wallKickTimer = 8;
         if (m->vel[1] > 0.0f) {
             m->vel[1] = 0.0f;
         }
@@ -1299,7 +1299,7 @@ s32 act_air_hit_wall(struct MarioState *m) {
         m->particleFlags |= PARTICLE_VERTICAL_STAR;
         return set_mario_action(m, ACT_BACKWARD_AIR_KB, 0);
     } else {
-        m->wallKickTimer = 5;
+        m->wallKickTimer = 8;
         if (m->vel[1] > 0.0f) {
             m->vel[1] = 0.0f;
         }
@@ -1694,9 +1694,11 @@ s32 act_shot_from_cannon(struct MarioState *m) {
             break;
     }
 
-    if (m->vel[1] < 0.0f) {
+    if (m->actionTimer == 45) {
         set_mario_action(m, ACT_FLYING, 0);
+        m->actionTimer = 0;
     }
+    m->actionTimer++;
 
     if ((m->forwardVel -= 0.05f) < 10.0f) {
         mario_set_forward_vel(m, 10.0f);
