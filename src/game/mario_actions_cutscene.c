@@ -422,14 +422,13 @@ s32 act_reading_automatic_dialog(struct MarioState *m) {
     u32 actionArg;
 
     m->actionState++;
+    if (m->prevAction == ACT_UNLOCKING_STAR_DOOR) m->actionState = 10; // really hacky way of doing this but whatever
     if (m->actionState == 2) {
         enable_time_stop();
     }
     if (m->actionState < 9) {
         set_mario_animation(m, m->prevAction == ACT_STAR_DANCE_WATER ? MARIO_ANIM_WATER_IDLE
-                                                                     : MARIO_ANIM_FIRST_PERSON);
-        // always look up for automatic dialogs
-        m->actionTimer -= 1024;
+                                                                     : MARIO_ANIM_IDLE_HEAD_LEFT);
     } else {
         // set Mario dialog
         if (m->actionState == 9) {
@@ -442,32 +441,20 @@ s32 act_reading_automatic_dialog(struct MarioState *m) {
         }
         // wait until dialog is done
         else if (m->actionState == 10) {
-            if (get_dialog_id() >= 0) {
+            if (get_dialog_id() < 0) {
+                disable_time_stop();
+                if (m->prevAction == ACT_STAR_DANCE_WATER) {
+                    set_mario_action(m, ACT_WATER_IDLE, 0); // 100c star?
+                } else {
+                    // make Mario walk into door after star dialog
+                    set_mario_action(m, m->prevAction == ACT_UNLOCKING_STAR_DOOR ? ACT_WALKING : ACT_IDLE,
+                                    0);
+                }
+            } else {
                 m->actionState--;
             }
         }
-        // look back down
-        else if (m->actionState < 19) {
-            m->actionTimer += 1024;
-        }
-        // finished action
-        else if (m->actionState == 25) {
-            disable_time_stop();
-            if (gNeverEnteredCastle) {
-                gNeverEnteredCastle = FALSE;
-                play_cutscene_music(SEQUENCE_ARGS(0, SEQ_LEVEL_INSIDE_CASTLE));
-            }
-            if (m->prevAction == ACT_STAR_DANCE_WATER) {
-                set_mario_action(m, ACT_WATER_IDLE, 0); // 100c star?
-            } else {
-                // make Mario walk into door after star dialog
-                set_mario_action(m, m->prevAction == ACT_UNLOCKING_STAR_DOOR ? ACT_WALKING : ACT_IDLE,
-                                 0);
-            }
-        }
     }
-    // apply head turn
-    vec3s_set(m->marioBodyState->headAngle, m->actionTimer, 0, 0);
     return FALSE;
 }
 
@@ -547,7 +534,7 @@ s32 act_debug_free_move(struct MarioState *m) {
             return set_mario_action(m, ACT_IDLE, 0);
         } else {
             // slight upwards boost to get you some hover time
-            m->vel[1] = 20.0f;
+            m->vel[1] = 8.0f;
             gPlayer1Controller->buttonDown &= ~U_JPAD;
             return set_mario_action(m, ACT_FREEFALL, 0);
         }
@@ -789,18 +776,33 @@ s32 launch_mario_until_land(struct MarioState *m, s32 endAction, s32 animation, 
 }
 
 s32 act_unlocking_key_door(struct MarioState *m) {
-    m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
+    if (m->actionTimer < 135) m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
 
-    m->pos[0] = m->usedObj->oPosX + coss(m->faceAngle[1]) * 75.0f;
-    m->pos[2] = m->usedObj->oPosZ + sins(m->faceAngle[1]) * 75.0f;
+    if (m->actionTimer < 135) {
+        m->pos[0] = m->usedObj->oPosX + coss(m->faceAngle[1]) * 75.0f;
+        m->pos[2] = m->usedObj->oPosZ + sins(m->faceAngle[1]) * 75.0f;
+    }
 
     if (m->actionArg & WARP_FLAG_DOOR_FLIP_MARIO) {
-        m->faceAngle[1] += 0x8000;
+        if (m->actionTimer < 135) m->faceAngle[1] += 0x8000;
     }
 
     if (m->actionTimer == 0) {
         spawn_obj_at_mario_rel_yaw(m, MODEL_BOWSER_KEY_CUTSCENE, bhvBowserKeyUnlockDoor, 0);
         set_mario_animation(m, MARIO_ANIM_UNLOCK_DOOR);
+    }
+    if (m->actionTimer == 135) set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT);
+    if (m->actionTimer >= 136) {
+        if (m->actionTimer < 142) {
+            m->faceAngle[1] -= DEGREES(15);
+        } else if (m->actionTimer < 148) {
+            set_mario_anim_with_accel(m, MARIO_ANIM_WALKING, 0x00050000);
+            m->pos[0] += 12.0f * sins(m->faceAngle[1]);
+            m->pos[2] += 12.0f * coss(m->faceAngle[1]);
+        } else if (m->actionTimer <= 153) {
+            set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT);
+            m->faceAngle[1] += DEGREES(15);
+        }
     }
 
     switch (m->marioObj->header.gfx.animInfo.animFrame) {
@@ -812,10 +814,10 @@ s32 act_unlocking_key_door(struct MarioState *m) {
             break;
     }
 
-    update_mario_pos_for_anim(m);
+    if (m->actionTimer < 135) update_mario_pos_for_anim(m);
     stop_and_set_height_to_floor(m);
 
-    if (is_anim_at_end(m)) {
+    if (m->actionTimer >= 153) {
         if (GET_BPARAM1(m->usedObj->oBehParams) == KEY_DOOR_BP1_UPSTAIRS) {
             save_file_set_flags(SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR);
             save_file_clear_flags(SAVE_FLAG_HAVE_KEY_2);
@@ -1026,25 +1028,28 @@ s32 act_spawn_spin_airborne(struct MarioState *m) {
     // updates all velocity variables based on m->forwardVel
     mario_set_forward_vel(m, m->forwardVel);
 
-    // landed on floor, play spawn land animation
-    if (perform_air_step(m, AIR_STEP_CHECK_NONE) == AIR_STEP_LANDED) {
-        play_mario_landing_sound(m, SOUND_ACTION_TERRAIN_LANDING);
-        set_mario_action(m, ACT_SPAWN_SPIN_LANDING, 0);
+    switch (perform_air_step(m, 0)) {
+        case AIR_STEP_LANDED:
+            play_mario_landing_sound(m, SOUND_ACTION_TERRAIN_LANDING);
+            if (m->actionState++ == 0) {
+                m->vel[1] = 32.0f;
+            } else {
+                set_mario_action(m, ACT_SPAWN_SPIN_LANDING, 0);
+            }
+            break;
+
+        case AIR_STEP_HIT_WALL:
+            mario_bonk_reflection(m, TRUE);
+            break;
     }
 
-    // is 300 units above floor, spin and play woosh sounds
-    if (m->actionState == ACT_STATE_SPAWN_SPIN_AIRBORNE_SPINNING && m->pos[1] - m->floorHeight > 300.0f) {
-        if (set_mario_animation(m, MARIO_ANIM_FORWARD_SPINNING) == 0) { // first anim frame
-            play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
-        }
-    }
-
-    // under 300 units above floor, enter freefall animation
-    else {
-        m->actionState = ACT_STATE_SPAWN_SPIN_AIRBORNE_FALLING;
+    if (m->actionState == 0 || m->vel[1] > 0.0f) {
+        set_mario_animation(m, MARIO_ANIM_FORWARD_SPINNING);
+    } else {
         set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);
     }
 
+    m->particleFlags |= PARTICLE_SPARKLES;
     return FALSE;
 }
 

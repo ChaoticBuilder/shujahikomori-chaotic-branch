@@ -162,7 +162,6 @@ s32 act_punching(struct MarioState *m) {
         m->actionTimer = 7;
     }
 
-    mario_set_forward_vel(m, sPunchingForwardVelocities[m->actionTimer]);
     if (m->actionTimer > 0) {
         m->actionTimer--;
     }
