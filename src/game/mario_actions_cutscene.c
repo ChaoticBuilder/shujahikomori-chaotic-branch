@@ -901,7 +901,7 @@ s32 act_entering_star_door(struct MarioState *m) {
 
     // set Mario's animation
     if (m->actionTimer < 15) {
-        set_mario_animation(m, MARIO_ANIM_FIRST_PERSON);
+        set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT);
     }
 
     // go through door? for 20 frames
@@ -975,17 +975,14 @@ s32 act_warp_door_spawn(struct MarioState *m) {
             m->usedObj->oInteractStatus = INT_STATUS_WARP_DOOR_PUSHED;
         }
     } else if (m->usedObj->oAction == DOOR_ACT_CLOSED) {
-#ifdef ENABLE_VANILLA_LEVEL_SPECIFIC_CHECKS
         if (gNeverEnteredCastle && gCurrLevelNum == LEVEL_CASTLE) {
+            gNeverEnteredCastle = FALSE;
             set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, DIALOG_021);
         } else {
             set_mario_action(m, ACT_IDLE, 0);
         }
-#else
-        set_mario_action(m, ACT_IDLE, 0);
-#endif
     }
-    set_mario_animation(m, MARIO_ANIM_FIRST_PERSON);
+    set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT);
     stop_and_set_height_to_floor(m);
     return FALSE;
 }

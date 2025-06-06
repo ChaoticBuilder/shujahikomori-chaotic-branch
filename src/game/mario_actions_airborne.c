@@ -317,17 +317,18 @@ void update_flying_pitch(struct MarioState *m) {
 }
 
 void update_flying(struct MarioState *m) {
-    if (m->actionTimer >= 6) { // flying spinout bugfix *actually fixed this time I tested it*
-        update_flying_pitch(m);
-        update_flying_yaw(m);
+    update_flying_pitch(m);
+    update_flying_yaw(m);
+    if (m->actionTimer < 1) {
+        vec3_zero(m->angleVel);
+        m->actionTimer++;
     }
-    if (m->actionTimer < 6) m->actionTimer++;
 
     if (!(m->flags & MARIO_WING_CAP)) {
         m->forwardVel -= 2.0f * ((f32) m->faceAngle[0] / 0x4000);
         m->forwardVel -= 0.5f * (1.0f - coss(m->angleVel[1]));
     } else {
-        m->forwardVel = 40.0f;
+        m->forwardVel = 48.0f;
     }
 
     if (m->forwardVel < 0.0f) {
