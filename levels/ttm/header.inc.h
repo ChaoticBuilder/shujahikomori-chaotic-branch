@@ -13,7 +13,7 @@ extern u8 ttm_dl__3_pal_rgba16[];
 extern Vtx ttm_dl_Cube_mesh_layer_1_vtx_cull[8];
 extern Vtx ttm_dl_Cube_mesh_layer_1_vtx_0[184];
 extern Gfx ttm_dl_Cube_mesh_layer_1_tri_0[];
-extern Vtx ttm_dl_Cube_mesh_layer_1_vtx_1[571];
+extern Vtx ttm_dl_Cube_mesh_layer_1_vtx_1[572];
 extern Gfx ttm_dl_Cube_mesh_layer_1_tri_1[];
 extern Vtx ttm_dl_Cube_mesh_layer_1_vtx_2[44];
 extern Gfx ttm_dl_Cube_mesh_layer_1_tri_2[];
