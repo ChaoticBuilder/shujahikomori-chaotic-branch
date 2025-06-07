@@ -367,7 +367,7 @@ u32 common_air_action_step(struct MarioState *m, u32 landAction, s32 animation, 
     switch (stepResult) {
         case AIR_STEP_NONE:
             if (animation == MARIO_ANIM_SLIDEFLIP) {
-                set_mario_anim_with_accel(m, animation, 0x20000);
+                set_mario_anim_with_accel(m, animation, 0x18000);
             } else {
                 set_mario_animation(m, animation);
             }
@@ -675,17 +675,15 @@ s32 act_twirling(struct MarioState *m) {
     s16 startTwirlYaw = m->twirlYaw;
     s16 yawVelTarget;
 
-    if (m->input & INPUT_A_DOWN) {
+    if (m->input & INPUT_A_DOWN
+#ifdef Z_TWIRL
+        || m->input & INPUT_Z_DOWN
+#endif
+    ) {
         yawVelTarget = 0x2000;
     } else {
         yawVelTarget = 0x1800;
     }
-
-#ifdef Z_TWIRL
-    if (m->input & INPUT_Z_DOWN) {
-        yawVelTarget = 0x3000;
-    }
-#endif
 
     m->angleVel[1] = approach_s32_symmetric(m->angleVel[1], yawVelTarget, 0x200);
     m->twirlYaw += m->angleVel[1];
@@ -1319,7 +1317,7 @@ s32 act_air_hit_wall(struct MarioState *m) {
 
 s32 act_forward_rollout(struct MarioState *m) {
     if (m->actionState == 0) {
-        m->vel[1] = 30.0f;
+        m->vel[1] = 32.0f;
         m->actionState = 1;
     }
 
@@ -1360,7 +1358,7 @@ s32 act_forward_rollout(struct MarioState *m) {
 
 s32 act_backward_rollout(struct MarioState *m) {
     if (m->actionState == 0) {
-        m->vel[1] = 30.0f;
+        m->vel[1] = 32.0f;
         m->actionState = 1;
     }
 
@@ -1550,6 +1548,9 @@ f32 inc = 0;
 s32 act_slide_kick(struct MarioState *m) {
     f32 intendedDYaw = m->intendedMag * coss(m->intendedYaw - m->faceAngle[1]);
 
+    if (m->actionTimer < 3)
+        m->vel[1] = sqr((m->actionTimer + 3));
+
     play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_HOOHOO);
 
     switch (m->actionArg) {
@@ -1570,8 +1571,6 @@ s32 act_slide_kick(struct MarioState *m) {
             set_mario_animation(m, MARIO_GIGALEAK_SLIDEKICK_END);
             break;
     }
-
-    
 
     switch (m->actionState) {
         case 0:
