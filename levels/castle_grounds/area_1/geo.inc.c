@@ -3,7 +3,10 @@
 const GeoLayout castle_grounds_area_1_geo[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
-		GEO_ROTATION_NODE_WITH_DL(LAYER_OPAQUE, 90, 0, 0, castle_grounds_dl_shujagrounds_mesh_layer_1),
+		GEO_ROTATION_NODE_WITH_DL(LAYER_ALPHA, 90, 0, 0, castle_grounds_dl_shujagrounds_mesh_layer_4),
+		GEO_OPEN_NODE(),
+			GEO_DISPLAY_LIST(LAYER_OPAQUE, castle_grounds_dl_shujagrounds_mesh_layer_1),
+		GEO_CLOSE_NODE(),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
