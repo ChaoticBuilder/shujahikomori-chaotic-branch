@@ -160,8 +160,8 @@ static Vtx vtx_mario_vsign_hand[]={
 	{94,-22,-18,0,0,0,28,-123,0,0},
 };
 Gfx RCP_mario_vsign_hand[]={
-	gsSPLight((&light_mario[2].l[0]),1),
-	gsSPLight((&light_mario[2].a),2),
+    gsSPLightColor(LIGHT_1, 0xffffffff),
+    gsSPLightColor(LIGHT_2, 0x3f3f3fff),
 	gsSPVertex(&vtx_mario_vsign_hand[0],16,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(3,0,2,0),
