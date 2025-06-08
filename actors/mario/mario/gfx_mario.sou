@@ -13,14 +13,14 @@
 /*	Matrial (light) datas														*/
 /********************************************************************************/
 
-static Lights1	light_mario[] = {
+/* UNUSED
 	ShapeColor_mario(  0,   0, 255),
 	ShapeColor_mario(255,   0,   0),
 	ShapeColor_mario(255, 255, 255),
 	ShapeColor_mario(114,  28,  14),
 	ShapeColor_mario(254, 193, 121),
 	ShapeColor_mario( 68,   6,   0),
-};
+*/
 
 /********************************************************************************/
 /*	Graphic display list datas													*/

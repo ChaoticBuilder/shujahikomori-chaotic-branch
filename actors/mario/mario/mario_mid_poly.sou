@@ -80,8 +80,8 @@ Gfx RCP_mario_mid14[]={
 	gsDPPipeSync(),
 	gsDPSetCombineMode(G_CC_MARIO_NORMAL, G_CC_MARIO_NORMAL),
 
-	gsSPLight((&light_mario[0].l[0]),1),
-	gsSPLight((&light_mario[0].a),2),
+    gsSPLightColor(LIGHT_1, 0x0000ffff),
+    gsSPLightColor(LIGHT_2, 0x00003fff),
 	gsSPVertex(&vtx_tinymario14[0],16,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(3,4,5,0),
@@ -150,8 +150,8 @@ static Vtx vtx_tinymario2[]={
 };
 
 Gfx RCP_mario_mid2[]={
-	gsSPLight((&light_mario[1].l[0]),1),
-	gsSPLight((&light_mario[1].a),2),
+    gsSPLightColor(LIGHT_1, 0xff0000ff),
+    gsSPLightColor(LIGHT_2, 0x3f0000ff),
 	gsSPVertex(&vtx_tinymario2[0],15,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(3,4,1,0),
@@ -258,8 +258,8 @@ static Vtx vtx_tinymario0[]={
 };
 
 Gfx RCP_mario_mid0[]={
-	gsSPLight((&light_mario[2].l[0]),1),
-	gsSPLight((&light_mario[2].a),2),
+    gsSPLightColor(LIGHT_1, 0xffffffff),
+    gsSPLightColor(LIGHT_2, 0x3f3f3fff),
 	gsSPVertex(&vtx_tinymario0[0],16,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(2,3,4,0),
@@ -322,8 +322,8 @@ static Vtx vtx_tinymario5[]={
 };
 
 Gfx RCP_mario_mid5[]={
-	gsSPLight((&light_mario[1].l[0]),1),
-	gsSPLight((&light_mario[1].a),2),
+    gsSPLightColor(LIGHT_1, 0xff0000ff),
+    gsSPLightColor(LIGHT_2, 0x3f0000ff),
 	gsSPVertex(&vtx_tinymario5[0],15,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(1,3,4,0),
@@ -432,8 +432,8 @@ static Vtx vtx_tinymario3[]={
 };
 
 Gfx RCP_mario_mid3[]={
-	gsSPLight((&light_mario[2].l[0]),1),
-	gsSPLight((&light_mario[2].a),2),
+    gsSPLightColor(LIGHT_1, 0xffffffff),
+    gsSPLightColor(LIGHT_2, 0x3f3f3fff),
 	gsSPVertex(&vtx_tinymario3[0],16,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(3,0,2,0),
@@ -496,8 +496,8 @@ static Vtx vtx_tinymario11[]={
 };
 
 Gfx RCP_mario_mid11[]={
-	gsSPLight((&light_mario[0].l[0]),1),
-	gsSPLight((&light_mario[0].a),2),
+    gsSPLightColor(LIGHT_1, 0x0000ffff),
+    gsSPLightColor(LIGHT_2, 0x00003fff),
 	gsSPVertex(&vtx_tinymario11[0],15,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(3,0,4,0),
@@ -595,8 +595,8 @@ static Vtx vtx_tinymario9[]={
 };
 
 Gfx RCP_mario_mid9[]={
-	gsSPLight((&light_mario[3].l[0]),1),
-	gsSPLight((&light_mario[3].a),2),
+    gsSPLightColor(LIGHT_1, 0x721c0eff),
+    gsSPLightColor(LIGHT_2, 0x1c070eff),
 	gsSPVertex(&vtx_tinymario9[0],16,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(3,0,2,0),
@@ -646,8 +646,8 @@ static Vtx vtx_tinymario8[]={
 };
 
 Gfx RCP_mario_mid8[]={
-	gsSPLight((&light_mario[0].l[0]),1),
-	gsSPLight((&light_mario[0].a),2),
+    gsSPLightColor(LIGHT_1, 0x0000ffff),
+    gsSPLightColor(LIGHT_2, 0x00003fff),
 	gsSPVertex(&vtx_tinymario8[0],15,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(3,4,5,0),
@@ -739,8 +739,8 @@ static Vtx vtx_tinymario6[]={
 };
 
 Gfx RCP_mario_mid6[]={
-	gsSPLight((&light_mario[3].l[0]),1),
-	gsSPLight((&light_mario[3].a),2),
+    gsSPLightColor(LIGHT_1, 0x721c0eff),
+    gsSPLightColor(LIGHT_2, 0x1c070eff),
 	gsSPVertex(&vtx_tinymario6[0],16,0),
 	gsSP1Triangle(0,1,2,0),
 	gsSP1Triangle(0,2,3,0),
