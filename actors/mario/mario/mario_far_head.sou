@@ -65,8 +65,8 @@ static Gfx gfx_mario_far_head_0[] = {
 };
 
 static Gfx gfx_mario_far_head_1[] = {
-	gsSPLight((&light_mario[4].l[0]),1 ),
-	gsSPLight((&light_mario[4].a   ),2 ),
+    gsSPLightColor(LIGHT_1, 0xfec179ff),
+    gsSPLightColor(LIGHT_2, 0x3f301eff),
 	gsSPVertex(&vtx_mario_far_head[5],  5, 0), 
 	gsSP1Triangle( 0, 1, 2, 0),
 	gsSP1Triangle( 3, 1, 4, 0),
@@ -87,8 +87,8 @@ static Gfx gfx_mario_far_head_2[] = {
 };
 
 static Gfx gfx_mario_far_head_3[] = {
-	gsSPLight((&light_mario[1].l[0]),1 ),
-	gsSPLight((&light_mario[1].a   ),2 ),
+    gsSPLightColor(LIGHT_1, 0xff0000ff),
+    gsSPLightColor(LIGHT_2, 0x3f0000ff),
 	gsSPVertex(&vtx_mario_far_head[20], 12, 0), 
 	gsSP1Triangle( 0, 1, 2, 0),
 	gsSP1Triangle( 3, 0, 4, 0),
@@ -104,8 +104,8 @@ static Gfx gfx_mario_far_head_3[] = {
 	gsSP1Triangle( 8, 7, 6, 0),
 	gsSP1Triangle(10, 5,11, 0),
 	gsSP1Triangle(10, 9, 5, 0),
-	gsSPLight((&light_mario[4].l[0]),1 ),
-	gsSPLight((&light_mario[4].a   ),2 ),
+    gsSPLightColor(LIGHT_1, 0xfec179ff),
+    gsSPLightColor(LIGHT_2, 0x3f301eff),
 	gsSPVertex(&vtx_mario_far_head[32], 13, 0), 
 	gsSP1Triangle( 0, 1, 2, 0),
 	gsSP1Triangle( 3, 0, 2, 0),
@@ -119,8 +119,8 @@ static Gfx gfx_mario_far_head_3[] = {
 	gsSP1Triangle( 8, 7,10, 0),
 	gsSP1Triangle(10, 7,11, 0),
 	gsSP1Triangle(10,11,12, 0),
-	gsSPLight((&light_mario[5].l[0]),1 ),
-	gsSPLight((&light_mario[5].a   ),2 ),
+    gsSPLightColor(LIGHT_1, 0x440600ff),
+    gsSPLightColor(LIGHT_2, 0x110100ff),
 	gsSPVertex(&vtx_mario_far_head[45],  6, 0), 
 	gsSP1Triangle( 0, 1, 2, 0),
 	gsSP1Triangle( 0, 2, 3, 0),
