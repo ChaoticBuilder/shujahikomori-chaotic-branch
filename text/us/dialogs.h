@@ -12,18 +12,15 @@
 #define SCRAM "scram--"
 #endif
 
-DEFINE_DIALOG(DIALOG_000, 1, 4, 30, 200, _("\
-W o w !\n\
-W h a t  a  w a r m\n\
-s u n n y  b r e e z e !\n\
+DEFINE_DIALOG(DIALOG_000, 1, 3, 30, 200, _("\
+WOW!\n\
+WHAT A WARM\n\
+SUNNY BREEZE!\n\
+SWIM THROUGH THE\n\
+RIVER, OR TREK UP\n\
+THE SUMMIT?\n\
 \n\
-S w i m  t h r o u g h\n\
-t h e  R i v e r ,\n\
-o r  t r e k  u p\n\
-t h e  S u m m i t ?\n\
-\n\
-I t ' s  y o u r\n\
-c h o i c e !"))
+IT'S YOUR CHOICE!"))
 
 DEFINE_DIALOG(DIALOG_001, 1, 4, 95, 200, _("\
 Watch out! If you wander\n\
@@ -271,11 +268,11 @@ a cake for you.\n\
 Yours truly--\n\
 Princess Toadstool"))
 
-DEFINE_DIALOG(DIALOG_021, 1, 2, 95, 200, _("\
-W e l c o m e  t o\n\
-t h e  C a s t l e ,\n\
-i t ' s  e x c l u s i v e\n\
-t o  t h e  s h o w !"))
+DEFINE_DIALOG(DIALOG_021, 1, 4, 95, 200, _("\
+WELCOME TO\n\
+THE CASTLE,\n\
+IT'S EXCLUSIVE\n\
+TO THE SHOW!"))
 
 DEFINE_DIALOG(DIALOG_022, 1, 2, 95, 200, _("\
 You need a key to open\n\
