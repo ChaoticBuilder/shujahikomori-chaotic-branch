@@ -367,11 +367,7 @@ u32 common_air_action_step(struct MarioState *m, u32 landAction, s32 animation, 
     stepResult = perform_air_step(m, stepArg);
     switch (stepResult) {
         case AIR_STEP_NONE:
-            if (animation == MARIO_ANIM_SLIDEFLIP) {
-                set_mario_anim_with_accel(m, animation, 0x18000);
-            } else {
-                set_mario_animation(m, animation);
-            }
+            set_mario_animation(m, animation);
             break;
 
         case AIR_STEP_LANDED:
