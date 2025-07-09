@@ -10,12 +10,6 @@
 #include "engine/math_util.h"
 #include "rumble_init.h"
 
-/**
- * Used by act_punching() to determine Mario's forward velocity during each
- * animation frame.
- */
-s8 sPunchingForwardVelocities[8] = { 0, 1, 1, 2, 3, 5, 7, 10 };
-
 void animated_stationary_ground_step(struct MarioState *m, s32 animation, u32 endAction) {
     stationary_ground_step(m);
     set_mario_animation(m, animation);
@@ -35,8 +29,8 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
     }
 
     switch (m->actionArg) {
-        case ACT_ARG_PUNCH_SEQUENCE_YAH:
-            play_sound(SOUND_MARIO_PUNCH_YAH, m->marioObj->header.gfx.cameraToObject);
+        case ACT_ARG_SOUND1:
+            play_sound(SOUND_ACTION_THROW, m->marioObj->header.gfx.cameraToObject);
             FALL_THROUGH;
         case ACT_ARG_PUNCH_SEQUENCE_FIRST_PUNCH:
             set_mario_animation(m, MARIO_ANIM_FIRST_PUNCH);
@@ -67,7 +61,7 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
             }
 
             if (m->input & INPUT_B_PRESSED) {
-                m->actionArg = ACT_ARG_PUNCH_SEQUENCE_GROUND_KICK;
+                m->actionArg = ACT_ARG_SOUND2;
             }
 
             if (is_anim_at_end(m)) {
@@ -75,9 +69,9 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
             }
             break;
 
-        case ACT_ARG_PUNCH_SEQUENCE_WAH:
-            play_sound(SOUND_MARIO_PUNCH_WAH, m->marioObj->header.gfx.cameraToObject);
-            // fallthrough
+        case ACT_ARG_SOUND2:
+            play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
+            FALL_THROUGH;
         case ACT_ARG_PUNCH_SEQUENCE_GROUND_KICK:
             animFrame = set_mario_animation(m, MARIO_ANIM_GROUND_KICK);
             if (animFrame == 0) {
@@ -90,6 +84,8 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
 
             if (is_anim_at_end(m)) {
                 set_mario_action(m, endAction, 0);
+            } else {
+                m->actionArg = ACT_ARG_PUNCH_SEQUENCE_GROUND_KICK;
             }
             break;
 

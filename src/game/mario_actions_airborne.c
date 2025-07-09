@@ -29,7 +29,7 @@ void play_far_fall_sound(struct MarioState *m) {
     u32 action = m->action;
     if (!(action & ACT_FLAG_INVULNERABLE) && action != ACT_TWIRLING && action != ACT_FLYING
         && !(m->flags & MARIO_FALL_SOUND_PLAYED)) {
-        if (m->peakHeight - m->pos[1] > FALL_DAMAGE_HEIGHT_SMALL) {
+        if (m->peakHeight - m->pos[1] > FALL_DAMAGE_HEIGHT_LARGE) {
             play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->header.gfx.cameraToObject);
             m->flags |= MARIO_FALL_SOUND_PLAYED;
         }
@@ -192,7 +192,7 @@ void update_air_with_turn(struct MarioState *m) {
             m->forwardVel -= 1.0f;
         }
         if (m->forwardVel < -16.0f) {
-            m->forwardVel += 2.0f;
+            m->forwardVel += 1.5f;
         }
 
         m->vel[0] = m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
@@ -223,7 +223,7 @@ void update_air_without_turn(struct MarioState *m) {
             m->forwardVel -= 1.0f;
         }
         if (m->forwardVel < -16.0f) {
-            m->forwardVel += 2.0f;
+            m->forwardVel += 1.5f;
         }
 
         m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
@@ -320,6 +320,7 @@ void update_flying_pitch(struct MarioState *m) {
 void update_flying(struct MarioState *m) {
     update_flying_pitch(m);
     update_flying_yaw(m);
+
     if (m->actionTimer < 1) {
         vec3_zero(m->angleVel);
         m->actionTimer++;
@@ -475,17 +476,8 @@ s32 act_triple_jump(struct MarioState *m) {
         return set_mario_action(m, ACT_SPECIAL_TRIPLE_JUMP, 0);
     }
 
-    if (m->input & INPUT_B_PRESSED) {
-        return set_mario_action(m, ACT_DIVE, 0);
-    }
-
-    if (m->input & INPUT_Z_PRESSED) {
-        return set_mario_action(m, ACT_GROUND_POUND, 0);
-    }
-
     play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, 0);
-
-    common_air_action_step(m, ACT_TRIPLE_JUMP_LAND, MARIO_ANIM_TRIPLE_JUMP, 0);
+    
 #if ENABLE_RUMBLE
     if (m->action == ACT_TRIPLE_JUMP_LAND) {
         queue_rumble_data(5, 40);
@@ -514,8 +506,8 @@ s32 act_backflip(struct MarioState *m) {
 s32 act_freefall(struct MarioState *m) {
     s32 animation = MARIO_ANIM_GENERAL_FALL;
 
-    if (m->input & INPUT_B_PRESSED) {
-        return set_mario_action(m, ACT_DIVE, 0);
+    if (check_kick_or_dive_in_air(m)) {
+        return TRUE;
     }
 
     if (m->input & INPUT_Z_PRESSED) {
@@ -704,6 +696,8 @@ s32 act_twirling(struct MarioState *m) {
             set_mario_animation(m, MARIO_ANIM_TWIRL);
             break;
     }
+
+    if (check_kick_or_dive_in_air(m)) return TRUE;
 
     if (startTwirlYaw > m->twirlYaw) {
         play_sound(SOUND_ACTION_TWIRL, m->marioObj->header.gfx.cameraToObject);
@@ -923,20 +917,21 @@ s32 act_ground_pound(struct MarioState *m) {
     u32 stepResult;
     f32 yOffset;
 
-        if (m->actionTimer < 10) {
-            yOffset = 20 - 2 * m->actionTimer;
-            if (m->pos[1] + yOffset + 160.0f < m->ceilHeight) {
-                m->pos[1] += yOffset;
-                m->peakHeight = m->pos[1];
-                vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-            }
+    if (m->actionTimer < 10) {
+        yOffset = 20 - 2 * m->actionTimer;
+        if (m->pos[1] + yOffset + 160.0f < m->ceilHeight) {
+            m->pos[1] += yOffset;
+            m->peakHeight = m->pos[1];
+            vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
         }
+    }
 
         set_mario_animation(m, m->actionArg == ACT_ARG_GROUND_POUND_NORMAL ? MARIO_ANIM_START_GROUND_POUND
                                                                            : MARIO_ANIM_TRIPLE_JUMP_GROUND_POUND);
-        if (m->actionTimer == 0) {
-            play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
-            mario_set_forward_vel(m, 0.0f);
+    if (m->actionTimer == 0) {
+        play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
+        play_sound(SOUND_MARIO_UH, m->marioObj->header.gfx.cameraToObject);
+        mario_set_forward_vel(m, 0.0f);
             m->vel[1] = -16.0f;
         }
 
@@ -1572,7 +1567,7 @@ s32 act_slide_kick(struct MarioState *m) {
     switch (m->actionState) {
         case 0:
             if (m->actionTimer == 0) {
-                speedGoal = m->forwardVel * 1.5f;
+                speedGoal = m->forwardVel * 2.0f;
                 m->forwardVel = 0;
             }
             inc = speedGoal / (m->actionTimer + 5);
@@ -1618,6 +1613,7 @@ s32 act_slide_kick(struct MarioState *m) {
 
 s32 act_jump_kick(struct MarioState *m) {
     if (m->actionState == ACT_STATE_JUMP_KICK_PLAY_SOUND_AND_ANIM) {
+        play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
         m->marioObj->header.gfx.animInfo.animID = -1;
         set_mario_animation(m, MARIO_ANIM_AIR_KICK);
         m->actionState = ACT_STATE_JUMP_KICK_KICKING;
@@ -1701,9 +1697,6 @@ s32 act_shot_from_cannon(struct MarioState *m) {
         mario_set_forward_vel(m, 10.0f);
     }
 
-    if (m->vel[1] > 0.0f) {
-        m->particleFlags |= PARTICLE_DUST;
-    }
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
 #endif
@@ -1804,10 +1797,6 @@ s32 act_flying(struct MarioState *m) {
         case AIR_STEP_HIT_LAVA_WALL:
             lava_boost_on_wall(m);
             break;
-    }
-
-    if (m->faceAngle[0] > 0x800 && m->forwardVel >= 48.0f) {
-        m->particleFlags |= PARTICLE_DUST;
     }
 
     if (startPitch <= 0 && m->faceAngle[0] > 0 && m->forwardVel >= 48.0f) {

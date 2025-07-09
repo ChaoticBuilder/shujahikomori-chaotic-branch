@@ -1008,7 +1008,6 @@ sound/samples/instruments/15_strings_4.aiff
 sound/samples/instruments/16_french_horns.aiff
 sound/samples/instruments/17_trumpet.aiff
 sound/samples/instruments/18_timpani.aiff
-sound/samples/instruments/19_brass.aiff
 sound/samples/instruments/1A_slap_bass.aiff
 sound/samples/instruments/1B_organ_2.aiff
 sound/samples/instruments/1C.aiff
@@ -1080,7 +1079,6 @@ sound/samples/sfx_5/00.aiff
 sound/samples/sfx_5/01.aiff
 sound/samples/sfx_5/02.aiff
 sound/samples/sfx_5/03.aiff
-sound/samples/sfx_5/04.aiff
 sound/samples/sfx_5/05.aiff
 sound/samples/sfx_5/06.aiff
 sound/samples/sfx_5/07.aiff
@@ -1088,10 +1086,8 @@ sound/samples/sfx_5/08.aiff
 sound/samples/sfx_5/09.aiff
 sound/samples/sfx_5/0A.aiff
 sound/samples/sfx_5/0B.aiff
-sound/samples/sfx_5/0C.aiff
 sound/samples/sfx_5/0D.aiff
 sound/samples/sfx_5/0E.aiff
-sound/samples/sfx_5/0F.aiff
 sound/samples/sfx_5/10.aiff
 sound/samples/sfx_5/11.aiff
 sound/samples/sfx_5/12.aiff
@@ -1140,19 +1136,13 @@ sound/samples/sfx_9/03.aiff
 sound/samples/sfx_9/04_camera_buzz.aiff
 sound/samples/sfx_9/05_camera_shutter.aiff
 sound/samples/sfx_9/06.aiff
-sound/samples/sfx_mario/00_mario_jump_hoo.aiff
-sound/samples/sfx_mario/01_mario_jump_wah.aiff
 sound/samples/sfx_mario/02_mario_yah.aiff
 sound/samples/sfx_mario/03_mario_haha.aiff
-sound/samples/sfx_mario/04_mario_yahoo.aiff
 sound/samples/sfx_mario/05_mario_uh.aiff
 sound/samples/sfx_mario/06_mario_hrmm.aiff
 sound/samples/sfx_mario/07_mario_wah2.aiff
 sound/samples/sfx_mario/08_mario_whoa.aiff
 sound/samples/sfx_mario/09_mario_eeuh.aiff
-sound/samples/sfx_mario/0A_mario_attacked.aiff
-sound/samples/sfx_mario/0B_mario_ooof.aiff
-sound/samples/sfx_mario/0C_mario_here_we_go.aiff
 sound/samples/sfx_mario/0D_mario_yawning.aiff
 sound/samples/sfx_mario/0E_mario_snoring1.aiff
 sound/samples/sfx_mario/0F_mario_snoring2.aiff
