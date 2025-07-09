@@ -252,7 +252,7 @@ u16 sLevelAcousticReaches[LEVEL_COUNT] = {
 
 #define AUDIO_MAX_DISTANCE 22000.0f
 
-#define LOW_VOLUME_REVERB 40.0f
+#define LOW_VOLUME_REVERB 48.0f
 
 #ifdef VERSION_JP
 #define VOLUME_RANGE_UNK1 0.8f
@@ -2099,7 +2099,7 @@ void sound_banks_disable(UNUSED u8 player, u16 bankMask) {
 /**
  * Called from threads: thread5_game_loop
  */
-static void disable_all_sequence_players(void) {
+UNUSED static void disable_all_sequence_players(void) {
     u8 i;
 
     for (i = 0; i < SEQUENCE_PLAYERS; i++) {
@@ -2376,8 +2376,6 @@ void stop_secondary_music(u16 fadeTimer) {
  * Called from threads: thread3_main, thread5_game_loop
  */
 void func_803210D4(u16 fadeDuration) {
-    u8 i;
-
     if (sHasStartedFadeOut) {
         return;
     }
@@ -2396,12 +2394,6 @@ void func_803210D4(u16 fadeDuration) {
 #else
         seq_player_fade_to_zero_volume(SEQ_PLAYER_ENV, fadeDuration);
 #endif
-    }
-
-    for (i = 0; i < SOUND_BANK_COUNT; i++) {
-        if (i != SOUND_BANK_MENU) {
-            fade_channel_volume_scale(SEQ_PLAYER_SFX, i, 0, fadeDuration / 16);
-        }
     }
 
     sHasStartedFadeOut = TRUE;
@@ -2502,27 +2494,11 @@ void play_toads_jingle(void) {
 /**
  * Called from threads: thread5_game_loop
  */
-void sound_reset(u8 reverbPresetId) {
-    if (reverbPresetId >= ARRAY_COUNT(gReverbSettings)) {
-        reverbPresetId = 0;
-    }
-    sGameLoopTicked = 0;
-    disable_all_sequence_players();
+void sound_reset(void) {
+    u8 i;
+
     sound_init();
-#ifdef VERSION_SH
-    func_802ad74c(0xF2000000, 0);
-#endif
-#if defined(VERSION_JP) || defined(VERSION_US)
-    audio_reset_session(reverbPresetId);
-#else
-    audio_reset_session_eu(reverbPresetId);
-#endif
-    osWritebackDCacheAll();
-    if (reverbPresetId != 7) {
-        preload_sequence(SEQ_EVENT_SOLVE_PUZZLE, PRELOAD_BANKS | PRELOAD_SEQUENCE);
-        preload_sequence(SEQ_EVENT_PEACH_MESSAGE, PRELOAD_BANKS | PRELOAD_SEQUENCE);
-        preload_sequence(SEQ_EVENT_CUTSCENE_STAR_SPAWN, PRELOAD_BANKS | PRELOAD_SEQUENCE);
+    for (i = 0; i < SEQUENCE_PLAYERS; i++) {
+        gSequencePlayers[i].muted = FALSE;
     }
-    seq_player_play_sequence(SEQ_PLAYER_SFX, SEQ_SOUND_PLAYER, 0);
-    sHasStartedFadeOut = FALSE;
 }

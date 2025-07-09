@@ -802,7 +802,7 @@ u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actionArg) {
             break;
 
         case ACT_SIDE_FLIP:
-            set_mario_y_vel_based_on_fspeed(m, 56.0f, 0.0f);
+            set_mario_y_vel_based_on_fspeed(m, 60.0f, 0.0f);
             m->forwardVel = 8.0f;
             m->faceAngle[1] = m->intendedYaw;
             break;
@@ -1701,7 +1701,7 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
     if (gMarioState->action) {
 #ifdef ENABLE_DEBUG_FREE_MOVE
         if (
-            (gMarioState->controller->buttonDown & U_JPAD) &&
+            (gMarioState->controller->buttonDown & D_JPAD) &&
             !(gMarioState->controller->buttonDown & L_TRIG)
         ) {
             set_camera_mode(gMarioState->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
