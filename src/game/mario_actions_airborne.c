@@ -321,7 +321,7 @@ void update_flying(struct MarioState *m) {
     update_flying_pitch(m);
     update_flying_yaw(m);
 
-    if (m->actionTimer < 1) {
+    if (m->actionTimer < 2) {
         vec3_zero(m->angleVel);
         m->actionTimer++;
     }
