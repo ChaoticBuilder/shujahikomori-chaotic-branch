@@ -53,11 +53,23 @@ const LevelScript level_castle_grounds_entry[] = {
 		WARP_NODE(0x1A, LEVEL_CASTLE_GROUNDS, 0x01, 0x1A, WARP_NO_CHECKPOINT),
 		MARIO_POS(0x01, 0, -1376, 376, 5099),
 		OBJECT(MODEL_NONE, -1376, 376, 5099, 0, 178, 0, 0x000A0000, bhvSpinAirborneWarp),
-		OBJECT(MODEL_NONE, -1374, 1053, 5102, 0, 178, 0, (0x1A << 16), bhvLaunchDeathWarp),
 		OBJECT(MODEL_NONE, -1376, 3149, 5099, 0, 0, 0, 0x000A0000, bhvAmbientSounds),
 		TERRAIN(castle_grounds_area_1_collision),
 		MACRO_OBJECTS(castle_grounds_area_1_macro_objs),
 		STOP_MUSIC(0),
+		TERRAIN_TYPE(TERRAIN_GRASS),
+		/* Fast64 begin persistent block [area commands] */
+		/* Fast64 end persistent block [area commands] */
+	END_AREA(),
+	AREA(2, castle_grounds_area_2),
+		WARP_NODE(0x0A, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
+		WARP_NODE(0xF0, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
+		WARP_NODE(0xF1, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
+		WARP_NODE(0x0B, LEVEL_CASTLE_GROUNDS, 0x01, 0x0C, WARP_NO_CHECKPOINT),
+		OBJECT(MODEL_NONE, 15821, 33, 619, 0, 178, 0, (0x1A << 16), bhvLaunchDeathWarp),
+		TERRAIN(castle_grounds_area_2_collision),
+		MACRO_OBJECTS(castle_grounds_area_2_macro_objs),
+		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_SLIDE),
 		TERRAIN_TYPE(TERRAIN_GRASS),
 		/* Fast64 begin persistent block [area commands] */
 		/* Fast64 end persistent block [area commands] */
