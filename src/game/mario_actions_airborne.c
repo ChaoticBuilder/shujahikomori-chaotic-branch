@@ -95,12 +95,12 @@ s32 check_fall_damage(struct MarioState *m, u32 hardFallAction) {
 }
 
 s32 check_kick_or_dive_in_air(struct MarioState *m) {
-    s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
     if (m->input & INPUT_B_PRESSED) {
-        return set_mario_action(m, (ABS(intendedDYaw) < 0x4000 && m->input & INPUT_NONZERO_ANALOG) ? ACT_DIVE : ACT_JUMP_KICK, 0);
+        return set_mario_action(m, m->forwardVel > 28.0f ? ACT_DIVE : ACT_JUMP_KICK, 0);
     }
     return FALSE;
 }
+
 
 #ifdef NO_GETTING_BURIED
 s32 should_get_stuck_in_ground(UNUSED struct MarioState *m) {
