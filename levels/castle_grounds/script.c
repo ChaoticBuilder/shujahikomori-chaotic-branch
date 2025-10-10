@@ -69,6 +69,7 @@ const LevelScript level_castle_grounds_entry[] = {
 		WARP_NODE(0xF1, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		WARP_NODE(0x1E, LEVEL_CASTLE_GROUNDS, 0x01, 0x1D, WARP_NO_CHECKPOINT),
 		WARP_NODE(0x1C, LEVEL_CASTLE_GROUNDS, 0x01, 0x1B, WARP_NO_CHECKPOINT),
+		WARP_NODE(0x20, LEVEL_CCM, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		OBJECT(MODEL_CASTLE_CASTLE_DOOR, 16444, -328, 2168, 0, 0, 0, (0x1E << 16), bhvDoorWarp),
 		OBJECT(MODEL_CASTLE_CASTLE_DOOR, 16589, -328, 2168, 0, -180, 0, (0x1C << 16), bhvDoorWarp),
 		OBJECT(MODEL_CASTLE_CASTLE_DOOR, 14825, -123, 964, 0, 90, 0, 0x00000000, bhvDoor),
@@ -81,10 +82,11 @@ const LevelScript level_castle_grounds_entry[] = {
 		OBJECT(MODEL_CASTLE_CASTLE_DOOR, 16598, 82, 219, 0, -180, 0, 0x00000000, bhvDoor),
 		OBJECT(MODEL_CASTLE_CASTLE_DOOR, 16517, -328, -2197, 0, 0, 0, 0x00000000, bhvDoor),
 		OBJECT(MODEL_NONE, 15821, 33, 619, 0, 178, 0, (0x1A << 16), bhvLaunchDeathWarp),
+		OBJECT(MODEL_NONE, 13300, 362, 978, 0, 0, 0, (0x20 << 16), bhvWarp),
 		TERRAIN(castle_grounds_area_2_collision),
 		MACRO_OBJECTS(castle_grounds_area_2_macro_objs),
-		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_SLIDE),
-		TERRAIN_TYPE(TERRAIN_GRASS),
+		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_INSIDE_CASTLE),
+		TERRAIN_TYPE(TERRAIN_STONE),
 		/* Fast64 begin persistent block [area commands] */
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
