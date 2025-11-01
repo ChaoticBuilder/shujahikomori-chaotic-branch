@@ -17,7 +17,7 @@
     #define EEPROM_SIZE 0x200
 #endif
 
-#define NUM_SAVE_FILES 4
+#define NUM_SAVE_FILES 1
 
 struct SaveBlockSignature {
     u16 magic;
@@ -39,7 +39,7 @@ struct SaveFile {
     // Star flags for each course.
     // The most significant bit of the byte *following* each course is set if the
     // cannon is open.
-    u8 courseStars[COURSE_COUNT]; // 200 bits
+    u16 courseStars[COURSE_COUNT];
 
     u8 courseCoinScores[COURSE_STAGES_COUNT]; // 120 bits
 
@@ -47,10 +47,7 @@ struct SaveFile {
 };
 
 enum SaveFileIndex {
-    SAVE_FILE_A,
-    SAVE_FILE_B,
-    SAVE_FILE_C,
-    SAVE_FILE_D
+    SAVE_FILE
 };
 
 struct MainMenuSaveData {
