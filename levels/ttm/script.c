@@ -26,6 +26,7 @@ const LevelScript level_ttm_entry[] = {
 	LOAD_RAW(0x0C, _group6_geoSegmentRomStart, _group6_geoSegmentRomEnd), 
 	LOAD_YAY0(0x08, _common0_yay0SegmentRomStart, _common0_yay0SegmentRomEnd), 
 	LOAD_RAW(0x0F, _common0_geoSegmentRomStart, _common0_geoSegmentRomEnd), 
+	LOAD_YAY0(0xa, _water_skybox_yay0SegmentRomStart, _water_skybox_yay0SegmentRomEnd), 
 	ALLOC_LEVEL_POOL(),
 	MARIO(MODEL_MARIO, 0x00000001, bhvMario), 
 	JUMP_LINK(script_func_global_1), 
@@ -60,12 +61,12 @@ const LevelScript level_ttm_entry[] = {
 	/* Fast64 end persistent block [level commands] */
 
 	AREA(1, ttm_area_1),
-		WARP_NODE(0x0A, LEVEL_TTM, 0x01, 0x0A, WARP_NO_CHECKPOINT),
+		WARP_NODE(0x0A, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		WARP_NODE(0xF0, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
 		WARP_NODE(0xF1, LEVEL_BOB, 0x01, 0x0A, WARP_NO_CHECKPOINT),
-		MARIO_POS(0x01, 0, 0, 200, 0),
-		MARIO_POS(0x01, 0, 2, 64, 15),
-		OBJECT(MODEL_NONE, 0, 83, 0, 0, 0, 0, (0x0A << 16), bhvSpinAirborneWarp),
+		WARP_NODE(0x0B, LEVEL_CASTLE_GROUNDS, 0x01, 0x0C, WARP_NO_CHECKPOINT),
+		MARIO_POS(0x01, 0, 1225, 682, 2012),
+		OBJECT(MODEL_NONE, 1189, 200, 2272, 0, 0, 0, 0x000A0000, bhvSpinAirborneWarp),
 		TERRAIN(ttm_area_1_collision),
 		MACRO_OBJECTS(ttm_area_1_macro_objs),
 		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_SLIDE),
@@ -74,7 +75,7 @@ const LevelScript level_ttm_entry[] = {
 		/* Fast64 end persistent block [area commands] */
 	END_AREA(),
 	FREE_LEVEL_POOL(),
-	MARIO_POS(0x01, 0, 2, 64, 15),
+	MARIO_POS(0x01, 0, 1225, 682, 2012),
 	CALL(0, lvl_init_or_update),
 	CALL_LOOP(1, lvl_init_or_update),
 	CLEAR_LEVEL(),
