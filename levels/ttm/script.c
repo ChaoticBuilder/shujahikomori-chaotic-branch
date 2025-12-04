@@ -67,6 +67,8 @@ const LevelScript level_ttm_entry[] = {
 		WARP_NODE(0x0B, LEVEL_CASTLE_GROUNDS, 0x01, 0x0C, WARP_NO_CHECKPOINT),
 		MARIO_POS(0x01, 0, 1225, 682, 2012),
 		OBJECT(MODEL_NONE, 1189, 200, 2272, 0, 0, 0, 0x000A0000, bhvSpinAirborneWarp),
+		OBJECT(MODEL_STAR, 1579, 282, 2325, 0, 0, 0, (1 << 24) | (0), bhvStar),
+		OBJECT(MODEL_STAR, 934, 215, 2152, 0, 0, 0, (1 << 24) | (1), bhvStar),
 		TERRAIN(ttm_area_1_collision),
 		MACRO_OBJECTS(ttm_area_1_macro_objs),
 		SET_BACKGROUND_MUSIC(0x00, SEQ_LEVEL_SLIDE),
