@@ -309,64 +309,12 @@ void bobomb_buddy_act_idle(void) {
     }
 }
 
-/**
- * Function for the Bob-omb Buddy cannon guy.
- * dialogFirstText is the first dialogID called when Bob-omb Buddy
- * starts to talk to Mario to prepare the cannon(s) for him.
- * Then the camera goes to the nearest cannon, to play the "prepare cannon" cutscene
- * dialogSecondText is called after Bob-omb Buddy has the cannon(s) ready and
- * then tells Mario that is "Ready for blastoff".
- */
-void bobomb_buddy_cannon_dialog(s16 dialogFirstText, s16 dialogSecondText) {
-    struct Object *cannonClosed;
-    s16 buddyText, cutscene;
-
-    switch (o->oBobombBuddyCannonStatus) {
-        case BOBOMB_BUDDY_CANNON_UNOPENED:
-            buddyText = cutscene_object_with_dialog(CUTSCENE_DIALOG, o, dialogFirstText);
-            if (buddyText != DIALOG_RESPONSE_NONE) {
-                save_file_set_cannon_unlocked();
-                cannonClosed = cur_obj_nearest_object_with_behavior(bhvCannonClosed);
-                if (cannonClosed != NULL) {
-                    o->oBobombBuddyCannonStatus = BOBOMB_BUDDY_CANNON_OPENING;
-                } else {
-                    o->oBobombBuddyCannonStatus = BOBOMB_BUDDY_CANNON_STOP_TALKING;
-                }
-            }
-            break;
-
-        case BOBOMB_BUDDY_CANNON_OPENING:
-            cannonClosed = cur_obj_nearest_object_with_behavior(bhvCannonClosed);
-            cutscene = cutscene_object(CUTSCENE_PREPARE_CANNON, cannonClosed);
-            if (cutscene == -1) {
-                o->oBobombBuddyCannonStatus = BOBOMB_BUDDY_CANNON_OPENED;
-            }
-            break;
-
-        case BOBOMB_BUDDY_CANNON_OPENED:
-            buddyText = cutscene_object_with_dialog(CUTSCENE_DIALOG, o, dialogSecondText);
-            if (buddyText != DIALOG_RESPONSE_NONE) {
-                o->oBobombBuddyCannonStatus = BOBOMB_BUDDY_CANNON_STOP_TALKING;
-            }
-            break;
-
-        case BOBOMB_BUDDY_CANNON_STOP_TALKING:
-            set_mario_npc_dialog(MARIO_DIALOG_STOP);
-
-            o->activeFlags &= ~ACTIVE_FLAG_INITIATED_TIME_STOP;
-            o->oBobombBuddyHasTalkedToMario = BOBOMB_BUDDY_HAS_TALKED;
-            o->oInteractStatus = INT_STATUS_NONE;
-            o->oAction = BOBOMB_BUDDY_ACT_IDLE;
-            o->oBobombBuddyCannonStatus = BOBOMB_BUDDY_CANNON_OPENED;
-            break;
-    }
-}
-
 void bobomb_buddy_act_talk(void) {
     if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_FRONT) == MARIO_DIALOG_STATUS_SPEAK) {
         o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
 
         switch (o->oBobombBuddyRole) {
+            case BOBOMB_BUDDY_ROLE_CANNON:
             case BOBOMB_BUDDY_ROLE_ADVICE:
                 if (cutscene_object_with_dialog(CUTSCENE_DIALOG, o, o->oBehParams2ndByte)
                     != BOBOMB_BUDDY_BP_STYPE_GENERIC) {
@@ -376,14 +324,6 @@ void bobomb_buddy_act_talk(void) {
                     o->oBobombBuddyHasTalkedToMario = BOBOMB_BUDDY_HAS_TALKED;
                     o->oInteractStatus = INT_STATUS_NONE;
                     o->oAction = BOBOMB_BUDDY_ACT_IDLE;
-                }
-                break;
-
-            case BOBOMB_BUDDY_ROLE_CANNON:
-                if (gCurrCourseNum == COURSE_BOB) {
-                    bobomb_buddy_cannon_dialog(DIALOG_004, DIALOG_105);
-                } else {
-                    bobomb_buddy_cannon_dialog(DIALOG_047, DIALOG_106);
                 }
                 break;
         }

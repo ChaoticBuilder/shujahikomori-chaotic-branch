@@ -341,7 +341,7 @@ void mario_blow_off_cap(struct MarioState *m, f32 capSpeed) {
     struct Object *capObject;
 
     if (does_mario_have_normal_cap_on_head(m)) {
-        save_file_set_cap_pos(m->pos[0], m->pos[1], m->pos[2]);
+        save_file_set_cap_pos();
 
         m->flags &= ~(MARIO_NORMAL_CAP | MARIO_CAP_ON_HEAD);
 
@@ -736,16 +736,8 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
     m->breathCounter += (4 * obj->oDamageOrCoinValue);
 #endif
     obj->oInteractStatus = INT_STATUS_INTERACTED;
-
-#ifdef X_COIN_STAR
-    if (COURSE_IS_MAIN_COURSE(gCurrCourseNum) && m->numCoins - obj->oDamageOrCoinValue < X_COIN_STAR
-        && m->numCoins >= X_COIN_STAR && !g100CoinStarSpawned) {
-        bhv_spawn_star_no_level_exit(STAR_BP_ACT_100_COINS);
-        g100CoinStarSpawned = TRUE;
-    }
-#endif
 #ifdef ENABLE_LIVES
-    if (gMarioState->numCoins >= 100 && gMarioState->numCoins != 1996) {
+    if (gMarioState->numCoins >= 100) {
         gMarioState->numLives++;
         play_sound(SOUND_GENERAL_COLLECT_1UP, gGlobalSoundSource);
         gMarioState->numCoins -= 100;
@@ -772,7 +764,6 @@ u32 interact_water_ring(struct MarioState *m, UNUSED u32 interactType, struct Ob
 }
 
 u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct Object *obj) {
-    u32 starIndex;
     u32 starGrabAction = ACT_STAR_DANCE_EXIT;
 #ifdef NON_STOP_STARS
  #ifdef KEYS_EXIT_LEVEL
@@ -835,12 +826,20 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
 
         gStarModelLastCollected = obj_get_model_id(obj);
 
-#ifdef GLOBAL_STAR_IDS
-        starIndex = (obj->oBehParams >> 24) & 0xFF;
-#else
-        starIndex = (obj->oBehParams >> 24) & 0x1F;
-#endif
-        save_file_collect_star_or_key(m->numCoins, starIndex);
+        /* Bowser keys */
+        switch (gCurrLevelNum) {
+            case LEVEL_BOWSER_1:
+                save_file_set_flags(SAVE_FLAG_HAVE_KEY_1);
+                break;
+
+            case LEVEL_BOWSER_2:
+                save_file_set_flags(SAVE_FLAG_HAVE_KEY_2);
+                break;
+
+            default:
+                save_file_set_star_flags(gCurrSaveFileNum - 1, COURSE_NUM_TO_INDEX(gCurrCourseNum), obj->oBehParams >> 24);
+            break;
+        }
 
         m->numStars =
             save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);

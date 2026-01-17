@@ -67,38 +67,10 @@ void bhv_act_selector_star_type_loop(void) {
             size = 1.25f;
             gCurrentObject->oAnimState++;
             break;
-        // If the 100 coin star is selected, rotate
-        case STAR_SELECTOR_100_COINS:
-            break;
     }
     // Scale act selector stars depending of the type selected
     cur_obj_scale(size);
 }
-
-/**
- * Renders the 100 coin star with an special star selector type.
- */
-void render_100_coin_star(u8 stars) {
-    if (stars & STAR_FLAG_ACT_100_COINS) {
-        // If the 100 coin star has been collected, create a new star selector next to the coin score.
-    #ifdef WIDE
-        if (gConfig.widescreen) {
-            sStarSelectorModels[6] = spawn_object_abs_with_rot(o, 0, MODEL_STAR,
-                                                            bhvActSelectorStarType, (370 * 4.0f) / 3, 24, -300, 0, 0, 0);
-        } else {
-            sStarSelectorModels[6] = spawn_object_abs_with_rot(o, 0, MODEL_STAR,
-                                                            bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
-        }
-    #else
-        sStarSelectorModels[6] = spawn_object_abs_with_rot(o, 0, MODEL_STAR,
-                                                        bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
-    #endif
-
-        sStarSelectorModels[6]->oStarSelectorSize = 0.8f;
-        sStarSelectorModels[6]->oStarSelectorType = STAR_SELECTOR_100_COINS;
-    }
-}
-
 /**
  * Act Selector Init Action
  * Checks how many stars has been obtained in a course, to render
@@ -165,7 +137,6 @@ void bhv_act_selector_init(void) {
         sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
     }
 #endif
-
 }
 
 /**
@@ -265,11 +236,6 @@ void print_course_number(void) {
  * Print act selector strings, some with special checks.
  */
 void print_act_selector_strings(void) {
-#if MULTILANG
-    unsigned char myScore[][10] = { {TEXT_MYSCORE}, {TEXT_MY_SCORE_FR}, {TEXT_MY_SCORE_DE} };
-#else
-    unsigned char myScore[] = { TEXT_MYSCORE };
-#endif
     unsigned char starNumbers[] = { TEXT_ZERO };
 
 #if MULTILANG
@@ -311,23 +277,8 @@ void print_act_selector_strings(void) {
     }
     currLevelName = segmented_to_virtual(levelNameTbl[COURSE_NUM_TO_INDEX(gCurrCourseNum)]);
 #endif
-
-    // Print the coin highscore.
-    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
-    print_hud_my_score_coins(1, gCurrSaveFileNum - 1, COURSE_NUM_TO_INDEX(gCurrCourseNum), 155, 106);
-    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
-
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, 255);
-    // Print the "MY SCORE" text if the coin score is more than 0
-    if (save_file_get_course_coin_score(gCurrSaveFileNum - 1, COURSE_NUM_TO_INDEX(gCurrCourseNum)) != 0) {
-#if MULTILANG
-        print_generic_string(95, 118, myScore[language]);
-#else
-        print_generic_string(102, 118, myScore);
-#endif
-    }
 
 #if MULTILANG
     print_generic_string(get_str_x_pos_from_center(160, (currLevelName + 3), 10.0f), 33, currLevelName + 3);
@@ -386,18 +337,11 @@ Gfx *geo_act_selector_strings(s16 callContext, UNUSED struct GraphNode *node, UN
  * Also load how much stars a course has, without counting the 100 coin star.
  */
 s32 lvl_init_act_selector_values_and_stars(UNUSED s32 arg, UNUSED s32 unused) {
-    u8 stars = save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_NUM_TO_INDEX(gCurrCourseNum));
-
     sLoadedActNum = 0;
     sInitSelectedActNum = 0;
     sVisibleStars = 0;
     sObtainedStars =
         save_file_get_course_star_count(gCurrSaveFileNum - 1, COURSE_NUM_TO_INDEX(gCurrCourseNum));
-
-    // Don't count 100 coin star
-    if (stars & STAR_FLAG_ACT_100_COINS) {
-        sObtainedStars--;
-    }
 
     return 0;
 }

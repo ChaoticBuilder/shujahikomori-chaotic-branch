@@ -13,17 +13,25 @@ static struct ObjectHitbox sCollectStarHitbox = {
 };
 
 void bhv_collect_star_init(void) {
-    u16 starIdPart1 = GET_BPARAM1(o->oBehParams);
-    u16 starIdPart2 = GET_BPARAM4(o->oBehParams);
-    u16 starId =  (starIdPart1 + starIdPart2 << 8);
-#ifdef GLOBAL_STAR_IDS  
+    /* btw I genuinely do not want to adjust the code to use the other bparam for u16 stars
+     * if you want that, ask amit to help you
+     * (if you do, it's important you make sure to change the bitshifts and the savefile flag code)
+     * I just want to work on music and vibe, not go insane over a mario hack
+     */
+    if (!(o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT)) {
+        o->oBehParams = o->parentObj->oBehParams;
+    }
+    u8 starID = o->oBehParams >> 24;
 
-    u8 currentLevelStarFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_NUM_TO_INDEX(starId / 7));
-    if (currentLevelStarFlags & (1 << (starId % 7))) {
-#else
-    u8 currentLevelStarFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_NUM_TO_INDEX(gCurrCourseNum));
-    if (currentLevelStarFlags & (1 << starId)) {
-#endif
+    u8 currentLevelStarFlags;
+    if (starID < 10) {
+        currentLevelStarFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_NUM_TO_INDEX(gCurrCourseNum));
+    } else {
+        starID -= 10;
+        currentLevelStarFlags = save_file_get_extra_stars((gCurrSaveFileNum - 1), starID << 3);
+        starID &= 7;
+    }
+    if (currentLevelStarFlags & (1 << starID)) {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
     } else {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
