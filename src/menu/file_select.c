@@ -477,16 +477,16 @@ void render_menu_buttons(s32 selectedButtonID) {
     s32 idx = (selectedButtonID - 3) * 7;
 
     // File A
-    sMainMenuButtons[idx + 0] = SPAWN_FILE_SELECT_FILE_BUTTON(button, SAVE_FILE);
+    sMainMenuButtons[idx + 0] = SPAWN_FILE_SELECT_FILE_BUTTON(button, SAVE_FILE_A);
     sMainMenuButtons[idx + 0]->oMenuButtonScale = MENU_BUTTON_SCALE;
     // File B
-    sMainMenuButtons[idx + 1] = SPAWN_FILE_SELECT_FILE_BUTTON(button, SAVE_FILE);
+    sMainMenuButtons[idx + 1] = SPAWN_FILE_SELECT_FILE_BUTTON(button, SAVE_FILE_B);
     sMainMenuButtons[idx + 1]->oMenuButtonScale = MENU_BUTTON_SCALE;
     // File C
-    sMainMenuButtons[idx + 2] = SPAWN_FILE_SELECT_FILE_BUTTON(button, SAVE_FILE);
+    sMainMenuButtons[idx + 2] = SPAWN_FILE_SELECT_FILE_BUTTON(button, SAVE_FILE_C);
     sMainMenuButtons[idx + 2]->oMenuButtonScale = MENU_BUTTON_SCALE;
     // File D
-    sMainMenuButtons[idx + 3] = SPAWN_FILE_SELECT_FILE_BUTTON(button, SAVE_FILE);
+    sMainMenuButtons[idx + 3] = SPAWN_FILE_SELECT_FILE_BUTTON(button, SAVE_FILE_D);
     sMainMenuButtons[idx + 3]->oMenuButtonScale = MENU_BUTTON_SCALE;
 
     // Return to main menu button
@@ -1009,16 +1009,16 @@ static const Vec3s sSaveFileButtonInitPositions[] = {
  */
 void bhv_menu_button_manager_init(void) {
     // File A
-    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_A] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE);
+    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_A] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE_A);
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_A]->oMenuButtonScale = 1.0f;
     // File B
-    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_B] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE);
+    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_B] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE_B);
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_B]->oMenuButtonScale = 1.0f;
     // File C
-    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_C] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE);
+    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_C] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE_C);
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_C]->oMenuButtonScale = 1.0f;
     // File D
-    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_D] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE);
+    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_D] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE_D);
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_D]->oMenuButtonScale = 1.0f;
     // Score menu button
     sMainMenuButtons[MENU_BUTTON_SCORE] =
@@ -1352,10 +1352,10 @@ void print_main_menu_strings(void) {
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
     print_hud_lut_string(HUD_LUT_DIFF, SELECT_FILE_X, 35, textSelectFile);
     // Print file star counts
-    print_save_file_star_count(SAVE_FILE, SAVEFILE_X1, 78);
-    print_save_file_star_count(SAVE_FILE, SAVEFILE_X2, 78);
-    print_save_file_star_count(SAVE_FILE, SAVEFILE_X1, 118);
-    print_save_file_star_count(SAVE_FILE, SAVEFILE_X2, 118);
+    print_save_file_star_count(SAVE_FILE_A, SAVEFILE_X1, 78);
+    print_save_file_star_count(SAVE_FILE_B, SAVEFILE_X2, 78);
+    print_save_file_star_count(SAVE_FILE_C, SAVEFILE_X1, 118);
+    print_save_file_star_count(SAVE_FILE_D, SAVEFILE_X2, 118);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
     // Print menu names
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
@@ -1423,10 +1423,10 @@ void print_score_menu_strings(void) {
     // Print file star counts
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
-    print_save_file_star_count(SAVE_FILE, 90, 76);
-    print_save_file_star_count(SAVE_FILE, 211, 76);
-    print_save_file_star_count(SAVE_FILE, 90, 119);
-    print_save_file_star_count(SAVE_FILE, 211, 119);
+    print_save_file_star_count(SAVE_FILE_A, 90, 76);
+    print_save_file_star_count(SAVE_FILE_B, 211, 76);
+    print_save_file_star_count(SAVE_FILE_C, 90, 119);
+    print_save_file_star_count(SAVE_FILE_D, 211, 119);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
     // Print menu names
@@ -1542,10 +1542,10 @@ void print_copy_menu_strings(void) {
     // Print file star counts
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
-    print_save_file_star_count(SAVE_FILE, 90, 76);
-    print_save_file_star_count(SAVE_FILE, 211, 76);
-    print_save_file_star_count(SAVE_FILE, 90, 119);
-    print_save_file_star_count(SAVE_FILE, 211, 119);
+    print_save_file_star_count(SAVE_FILE_A, 90, 76);
+    print_save_file_star_count(SAVE_FILE_B, 211, 76);
+    print_save_file_star_count(SAVE_FILE_C, 90, 119);
+    print_save_file_star_count(SAVE_FILE_D, 211, 119);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
     // Print menu names
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
@@ -1741,10 +1741,10 @@ void print_erase_menu_strings(void) {
     // Print file star counts
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
-    print_save_file_star_count(SAVE_FILE, 90, 76);
-    print_save_file_star_count(SAVE_FILE, 211, 76);
-    print_save_file_star_count(SAVE_FILE, 90, 119);
-    print_save_file_star_count(SAVE_FILE, 211, 119);
+    print_save_file_star_count(SAVE_FILE_A, 90, 76);
+    print_save_file_star_count(SAVE_FILE_B, 211, 76);
+    print_save_file_star_count(SAVE_FILE_C, 90, 119);
+    print_save_file_star_count(SAVE_FILE_D, 211, 119);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
     // Print menu names
@@ -1854,56 +1854,12 @@ void print_score_file_castle_secret_stars(s8 fileIndex, s16 x, s16 y) {
 #define HISCORE_COIN_NAMES_X 60
 
 /**
- * Prints course coins collected in a score menu save file.
- */
-void print_score_file_course_coin_score(s8 fileIndex, s16 courseIndex, s16 x, s16 y) {
-    unsigned char coinScoreText[20];
-    u8 stars = save_file_get_star_flags(fileIndex, courseIndex);
-    unsigned char textCoinX[] = { TEXT_COIN_X };
-    unsigned char textStar[] = { TEXT_STAR };
-#define LENGTH 8
-    unsigned char fileNames[][LENGTH] = {
-        { TEXT_4DASHES }, // huh?
-        { TEXT_SCORE_MARIO_A }, { TEXT_SCORE_MARIO_B }, { TEXT_SCORE_MARIO_C }, { TEXT_SCORE_MARIO_D },
-    };
-#undef LENGTH
-    // MYSCORE
-    if (sScoreFileCoinScoreMode == 0) {
-        // Print "[coin] x"
-        print_menu_generic_string(x + 25, y, textCoinX);
-        // Print coin score
-        int_to_str(save_file_get_course_coin_score(fileIndex, courseIndex), coinScoreText);
-        print_menu_generic_string(x + 41, y, coinScoreText);
-        // If collected, print 100 coin star
-        if (stars & STAR_FLAG_ACT_100_COINS) {
-            print_menu_generic_string(x + 70, y, textStar);
-        }
-    }
-    // HISCORE
-    else {
-        // Print "[coin] x"
-        print_menu_generic_string(x + HISCORE_COIN_ICON_X, y, textCoinX);
-        // Print coin highscore
-        int_to_str((u16) save_file_get_max_coin_score(courseIndex) & 0xFFFF, coinScoreText);
-        print_menu_generic_string(x + HISCORE_COIN_TEXT_X, y, coinScoreText);
-        // Print coin highscore file
-        print_menu_generic_string(x + HISCORE_COIN_NAMES_X, y,
-                         fileNames[(save_file_get_max_coin_score(courseIndex) >> 16) & 0xFFFF]);
-    }
-}
-
-/**
  * Prints stars collected in a score menu save file.
  */
 void print_score_file_star_score(s8 fileIndex, s16 courseIndex, s16 x, s16 y) {
     s16 i = 0;
     unsigned char starScoreText[19];
-    u8 stars = save_file_get_star_flags(fileIndex, courseIndex);
     s8 starCount = save_file_get_course_star_count(fileIndex, courseIndex);
-    // Don't count 100 coin star
-    if (stars & STAR_FLAG_ACT_100_COINS) {
-        starCount--;
-    }
     // Add 1 star character for every star collected
     for (i = 0; i < starCount; i++) {
         starScoreText[i] = DIALOG_CHAR_STAR_FILLED;
@@ -1951,7 +1907,6 @@ void print_save_file_scores(s8 fileIndex) {
     for ((i = 0); (i < COURSE_STAGES_MAX); (i++)) {
         print_menu_generic_string((LEVEL_NAME_X + ((i < 9) * LEVEL_NUM_PAD)), (23 + (12 * (i + 1))), segmented_to_virtual(levelNameTable[i]));
         print_score_file_star_score(              fileIndex, i, STAR_SCORE_X, (23 + (12 * (i + 1))));
-        print_score_file_course_coin_score(       fileIndex, i,          213, (23 + (12 * (i + 1))));
     }
 
     // Print castle secret stars text
@@ -1981,14 +1936,15 @@ void print_file_select_strings(void) {
         case MENU_BUTTON_SCORE:        print_score_menu_strings(); sScoreFileCoinScoreMode = 0; break;
         case MENU_BUTTON_COPY:         print_copy_menu_strings();                               break;
         case MENU_BUTTON_ERASE:        print_erase_menu_strings();                              break;
-        case MENU_BUTTON_SCORE_FILE_A: print_save_file_scores(SAVE_FILE); break;
-        case MENU_BUTTON_SCORE_FILE_B: print_save_file_scores(SAVE_FILE); break;
-        case MENU_BUTTON_SCORE_FILE_C: print_save_file_scores(SAVE_FILE); break;
-        case MENU_BUTTON_SCORE_FILE_D: print_save_file_scores(SAVE_FILE); break;
+        case MENU_BUTTON_SCORE_FILE_A: print_save_file_scores(SAVE_FILE_A); break;
+        case MENU_BUTTON_SCORE_FILE_B: print_save_file_scores(SAVE_FILE_B); break;
+        case MENU_BUTTON_SCORE_FILE_C: print_save_file_scores(SAVE_FILE_C); break;
+        case MENU_BUTTON_SCORE_FILE_D: print_save_file_scores(SAVE_FILE_D); break;
         case MENU_BUTTON_SOUND_MODE:   print_sound_mode_menu_strings();     break;
     }
     // If all 4 save file exists, define true to sAllFilesExist to prevent more copies in copy menu
-    if (save_file_exists(SAVE_FILE) == TRUE) {
+    if (save_file_exists(SAVE_FILE_A) == TRUE && save_file_exists(SAVE_FILE_B) == TRUE &&
+        save_file_exists(SAVE_FILE_C) == TRUE && save_file_exists(SAVE_FILE_D) == TRUE) {
         sAllFilesExist = TRUE;
     } else {
         sAllFilesExist = FALSE;

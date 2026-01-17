@@ -17,7 +17,8 @@
     #define EEPROM_SIZE 0x200
 #endif
 
-#define NUM_SAVE_FILES 1
+#define NUM_SAVE_FILES 4
+#define EXTRA_STARS_ARRAY 32
 
 struct SaveBlockSignature {
     u16 magic;
@@ -26,35 +27,25 @@ struct SaveBlockSignature {
 
 struct SaveFile {
     // Location of lost cap.
-    // Note: the coordinates get set, but are never actually used, since the
-    // cap can always be found in a fixed spot within the course
-    u8 capLevel;
-    u8 capArea;
-    // Note: the coordinates get set, but are never actually used, since the
-    // cap can always be found in a fixed spot within the course
-    Vec3s capPos; // 48 bits
-
+    u8  capLevel;
+    u8  capArea;
     u32 flags;
 
     // Star flags for each course.
-    // The most significant bit of the byte *following* each course is set if the
-    // cannon is open.
-    u16 courseStars[COURSE_COUNT];
-
-    u8 courseCoinScores[COURSE_STAGES_COUNT]; // 120 bits
-
+    u8 courseStars[COURSE_MAX];
+    u8 extraStars[EXTRA_STARS_ARRAY];
+    u8 courseCoinScores[COURSE_STAGES_COUNT];
     struct SaveBlockSignature signature; // 32 bits
 };
 
 enum SaveFileIndex {
-    SAVE_FILE
+    SAVE_FILE_A,
+    SAVE_FILE_B,
+    SAVE_FILE_C,
+    SAVE_FILE_D
 };
 
 struct MainMenuSaveData {
-    // Each save file has a 2 bit "age" for each course. The higher this value,
-    // the older the high score is. This is used for tie-breaking when displaying
-    // on the high score screen.
-    u32 coinScoreAges[NUM_SAVE_FILES];
     u8 soundMode: 2;
 #ifdef WIDE
     u8 wideMode: 1;
@@ -75,8 +66,8 @@ struct MainMenuSaveData {
 };
 
 struct SaveBuffer {
-    // Each of the four save files has two copies. If one is bad, the other is used as a backup.
-    struct SaveFile files[NUM_SAVE_FILES][2];
+    struct SaveFile files[NUM_SAVE_FILES];
+    struct SaveFile file_backups[NUM_SAVE_FILES / 2];
     // Main menu data, storing config options.
     struct MainMenuSaveData menuData;
 };
@@ -91,15 +82,10 @@ STATIC_ASSERT(sizeof(struct SaveBuffer) <= EEPROM_SIZE, "ERROR: Save struct too 
 
 extern u8 gLastCompletedCourseNum;
 extern u8 gLastCompletedStarNum;
-extern s8 sUnusedGotGlobalCoinHiScore;
 extern u8 gGotFileCoinHiScore;
 extern u8 gCurrCourseStarFlags;
 extern u8 gSpecialTripleJump;
 extern s8 gLevelToCourseNumTable[];
-
-enum CourseFlags {
-    COURSE_FLAG_CANNON_UNLOCKED      = (1 <<  7), /* 0x00000080 */
-};
 
 // game progress flags
 enum SaveProgressFlags {
@@ -139,11 +125,12 @@ enum StarFlags {
     STAR_FLAG_ACT_4         = (1 << 3), // 0x08
     STAR_FLAG_ACT_5         = (1 << 4), // 0x10
     STAR_FLAG_ACT_6         = (1 << 5), // 0x20
-    STAR_FLAG_ACT_100_COINS = (1 << 6), // 0x40
-    STAR_FLAG_LAST          = STAR_FLAG_ACT_100_COINS
+    STAR_FLAG_ACT_7         = (1 << 6), // 0x40
+    STAR_FLAG_ACT_8         = (1 << 7), // 0x80
+    STAR_FLAG_LAST          = STAR_FLAG_ACT_8
 };
 
-#define SAVE_FLAG_TO_STAR_FLAG(cmd) (((cmd) >> 24) & 0x7F)
+#define SAVE_FLAG_TO_STAR_FLAG(cmd) ((cmd) >> 24)
 #define STAR_FLAG_TO_SAVE_FLAG(cmd) ((cmd) << 24)
 
 // Variable for setting a warp checkpoint.
@@ -167,21 +154,17 @@ void save_file_erase(s32 fileIndex);
 void save_file_copy(s32 srcFileIndex, s32 destFileIndex);
 void save_file_load_all(void);
 void save_file_reload(void);
-void save_file_collect_star_or_key(s16 coinScore, s16 starIndex);
 s32 save_file_exists(s32 fileIndex);
-u32 save_file_get_max_coin_score(s32 courseIndex);
 s32 save_file_get_course_star_count(s32 fileIndex, s32 courseIndex);
 s32 save_file_get_total_star_count(s32 fileIndex, s32 minCourse, s32 maxCourse);
 void save_file_set_flags(u32 flags);
 void save_file_clear_flags(u32 flags);
 u32 save_file_get_flags(void);
 u32 save_file_get_star_flags(s32 fileIndex, s32 courseIndex);
+u32 save_file_get_extra_stars(s32 fileIndex, s32 courseIndex);
 void save_file_set_star_flags(s32 fileIndex, s32 courseIndex, u32 starFlags);
-s32 save_file_get_course_coin_score(s32 fileIndex, s32 courseIndex);
-s32 save_file_is_cannon_unlocked(void);
-void save_file_set_cannon_unlocked(void);
-void save_file_set_cap_pos(s16 x, s16 y, s16 z);
-s32 save_file_get_cap_pos(Vec3s capPos);
+void save_file_set_cap_pos(void);
+s32 save_file_get_cap_pos(void);
 void save_file_set_sound_mode(u16 mode);
 u32 save_file_get_sound_mode(void);
 #ifdef WIDE
