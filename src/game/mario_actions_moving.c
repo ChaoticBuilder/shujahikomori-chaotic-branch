@@ -1307,7 +1307,7 @@ s32 act_crouch_slide(struct MarioState *m) {
         m->actionTimer++;
         if (m->input & INPUT_A_PRESSED) {
             if (m->forwardVel > 10.0f) {
-                m->forwardVel = m->forwardVel * 1.5;
+                if (gLJumpToggle) m->forwardVel = m->forwardVel * 1.5f;
                 return set_jumping_action(m, ACT_LONG_JUMP, 0);
             }
         }
@@ -1736,10 +1736,6 @@ s32 act_backflip_land(struct MarioState *m) {
 
     if (common_landing_cancels(m, &sBackflipLandAction, set_jumping_action)) {
         return TRUE;
-    }
-
-    if (!(m->input & INPUT_NONZERO_ANALOG)) {
-        play_sound_if_no_flag(m, SOUND_MARIO_HAHA, MARIO_MARIO_SOUND_PLAYED);
     }
 
     common_landing_action(m, MARIO_ANIM_TRIPLE_JUMP_LAND, ACT_FREEFALL);

@@ -36,14 +36,6 @@ void play_far_fall_sound(struct MarioState *m) {
     }
 }
 
-void play_knockback_sound(struct MarioState *m) {
-    if (m->actionArg == 0 && (m->forwardVel <= -28.0f || m->forwardVel >= 28.0f)) {
-        play_sound_if_no_flag(m, SOUND_MARIO_DOH, MARIO_MARIO_SOUND_PLAYED);
-    } else {
-        play_sound_if_no_flag(m, SOUND_MARIO_UH, MARIO_MARIO_SOUND_PLAYED);
-    }
-}
-
 s32 lava_boost_on_wall(struct MarioState *m) {
     m->faceAngle[1] = m->wallYaw;
 
@@ -1147,7 +1139,7 @@ s32 act_backward_air_kb(struct MarioState *m) {
         return TRUE;
     }
 
-    play_knockback_sound(m);
+    play_sound_if_no_flag(m, SOUND_MARIO_ATTACKED, MARIO_MARIO_SOUND_PLAYED);
     common_air_knockback_step(m, ACT_BACKWARD_GROUND_KB, ACT_HARD_BACKWARD_GROUND_KB, MARIO_ANIM_BACKWARD_AIR_KB, -16.0f);
     return FALSE;
 }
@@ -1157,19 +1149,19 @@ s32 act_forward_air_kb(struct MarioState *m) {
         return TRUE;
     }
 
-    play_knockback_sound(m);
+    play_sound_if_no_flag(m, SOUND_MARIO_ATTACKED, MARIO_MARIO_SOUND_PLAYED);
     common_air_knockback_step(m, ACT_FORWARD_GROUND_KB, ACT_HARD_FORWARD_GROUND_KB, MARIO_ANIM_AIR_FORWARD_KB, 16.0f);
     return FALSE;
 }
 
 s32 act_hard_backward_air_kb(struct MarioState *m) {
-    play_knockback_sound(m);
+    play_sound_if_no_flag(m, SOUND_MARIO_ATTACKED, MARIO_MARIO_SOUND_PLAYED);
     common_air_knockback_step(m, ACT_HARD_BACKWARD_GROUND_KB, ACT_HARD_BACKWARD_GROUND_KB, MARIO_ANIM_BACKWARD_AIR_KB, -16.0f);
     return FALSE;
 }
 
 s32 act_hard_forward_air_kb(struct MarioState *m) {
-    play_knockback_sound(m);
+    play_sound_if_no_flag(m, SOUND_MARIO_ATTACKED, MARIO_MARIO_SOUND_PLAYED);
     common_air_knockback_step(m, ACT_HARD_FORWARD_GROUND_KB, ACT_HARD_FORWARD_GROUND_KB, MARIO_ANIM_AIR_FORWARD_KB, 16.0f);
     return FALSE;
 }
@@ -1220,7 +1212,7 @@ s32 act_soft_bonk(struct MarioState *m) {
         return TRUE;
     }
 
-    play_knockback_sound(m);
+    play_sound_if_no_flag(m, SOUND_MARIO_UH, MARIO_MARIO_SOUND_PLAYED);
 
     common_air_knockback_step(m, ACT_FREEFALL_LAND, ACT_HARD_BACKWARD_GROUND_KB, MARIO_ANIM_GENERAL_FALL, m->forwardVel);
     return FALSE;

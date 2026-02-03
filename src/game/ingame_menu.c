@@ -39,11 +39,10 @@ u16 gDialogTextAlpha;
 s16 gCutsceneMsgXOffset;
 s16 gCutsceneMsgYOffset;
 s8 gRedCoinsCollected;
-#if defined(WIDE) && !defined(PUPPYCAM)
-u8 textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
-u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
-u8 textPressL[] = { TEXT_HUD_PRESS_L };
-#endif
+u8 gConfigOpen = FALSE;
+u8 gConfigScroll = 1;
+u8 gHighlightToggle = FALSE;
+f32 sFovSlider = 0.0f;
 
 #if MULTILANG
 #define seg2_course_name_table course_name_table_eu_en
@@ -1167,6 +1166,8 @@ void render_dialog_entries(void) {
                     play_sound(SOUND_MENU_MESSAGE_NEXT_PAGE, gGlobalSoundSource);
                 }
             }
+            if (gPlayer1Controller->buttonPressed & Z_TRIG) gDialogBoxState = DIALOG_STATE_CLOSING;
+            
             lowerBound = 1;
             break;
         case DIALOG_STATE_HORIZONTAL: // scrolling
@@ -1529,26 +1530,99 @@ void render_pause_red_coins(void) {
     }
 }
 
-/// By default, not needed as puppycamera has an option, but should you wish to revert that, you are legally allowed.
+u8 gLJumpToggle = TRUE;
 
-#if defined(WIDE) && !defined(PUPPYCAM)
-void render_widescreen_setting(void) {
-    gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-    if (!gConfig.widescreen) {
-        print_generic_string(10, 20, textCurrRatio43);
-        print_generic_string(10,  7, textPressL);
-    } else {
-        print_generic_string(10, 20, textCurrRatio169);
-        print_generic_string(10,  7, textPressL);
+void config_options_scroll(void) {
+    if (gHighlightToggle)
+        return;
+
+    if (gGlobalTimer % 4 == 0) {
+        if (gPlayer1Controller->buttonDown & L_JPAD || gPlayer1Controller->rawStickX <= -16.0f) {
+            gConfigScroll--; play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
+        }
+        if (gPlayer1Controller->buttonDown & R_JPAD || gPlayer1Controller->rawStickX >=  16.0f) {
+            gConfigScroll++; play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
+        }
+        if (gPlayer1Controller->buttonDown & U_JPAD || gPlayer1Controller->rawStickY >=  16.0f) {
+            if (gConfigScroll == (CFG_START + 1)) gConfigScroll = (CFG_END - 2); else
+            { gConfigScroll -= 2; play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource); }
+        }
+        if (gPlayer1Controller->buttonDown & D_JPAD || gPlayer1Controller->rawStickY <= -16.0f) {
+            if (gConfigScroll == (CFG_END - 1)) gConfigScroll = (CFG_START + 2); else
+            { gConfigScroll += 2; play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource); }
+        }
     }
-    gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
-    if (gPlayer1Controller->buttonPressed & L_TRIG){
-        gConfig.widescreen ^= 1;
-        save_file_set_widescreen_mode(gConfig.widescreen);
+
+    if (gConfigScroll == CFG_START) gConfigScroll = (CFG_END - 1);
+    if (gConfigScroll == CFG_END) gConfigScroll = (CFG_START + 1);
+}
+
+void config_options(void) {
+    if (gPlayer1Controller->buttonPressed & A_BUTTON) {
+#ifdef WIDE
+        if (gConfigScroll == CFG_WIDE) {
+            gConfig.widescreen ^= 1;
+            save_file_set_widescreen_mode(gConfig.widescreen);
+        }
+#endif
+        if (gConfigScroll == CFG_FOV) gHighlightToggle ^= 1;
+        if (gConfigScroll == CFG_LJUMP) {
+            gLJumpToggle ^= 1;
+        }
     }
 }
+
+void fov_slider(void) {
+    s16 minFov = -15; s16 maxFov = 45;
+    if (gPlayer1Controller->rawStickX <= -16.0f) { sFovSlider -= 0.03125f; }
+    if (gPlayer1Controller->rawStickX >= 16.0f) { sFovSlider += 0.03125f; }
+
+    if (gGlobalTimer % 2 == 0) {
+        if (gPlayer1Controller->buttonDown & L_JPAD) { sFovSlider--;
+            if (sFovSlider >= minFov) play_sound(SOUND_MENU_CLICK_CHANGE_VIEW, gGlobalSoundSource); }
+        if (gPlayer1Controller->buttonDown & R_JPAD) { sFovSlider++;
+            if (sFovSlider <= maxFov) play_sound(SOUND_MENU_CLICK_CHANGE_VIEW, gGlobalSoundSource); }
+    }
+    if ((gPlayer1Controller->buttonPressed & L_JPAD && sFovSlider <= minFov) ||
+        (gPlayer1Controller->buttonPressed & R_JPAD && sFovSlider >= minFov)) play_sound(SOUND_MENU_CAMERA_BUZZ, gGlobalSoundSource);
+
+    if (gPlayer1Controller->buttonPressed & D_JPAD) {
+        sFovSlider = 0; play_sound(SOUND_MENU_CLICK_CHANGE_VIEW, gGlobalSoundSource); }
+
+    sFovSlider = CLAMP(sFovSlider, minFov, maxFov);
+}
+
+void config_options_box(void) {
+    char config[32];
+    config_options_scroll();
+    config_options();
+    u8 x = 32;
+    u8 y = 32;
+
+#ifdef WIDE
+    (!gConfig.widescreen) ? sprintf(config, "Ratio: 4:3") : sprintf(config, "Ratio: 16:9");
+#else
+    sprintf(config, "Widescreen Disabled");
 #endif
+    (gConfigScroll == CFG_WIDE) ? print_set_envcolour(255, 255, 255, 255) : print_set_envcolour(127, 127, 127, 255);
+
+    print_small_text_light(x, y, config, PRINT_ALL, PRINT_ALL, FONT_VANILLA);
+    if (x >= 160) { y += 12; } (x < 160) ? (x += 160) : (x -= 160);
+
+    sprintf(config, "FOV: %2.3f", sFovSlider + 45.0f);
+    if (gConfigScroll == CFG_FOV) {
+        if (!gHighlightToggle) print_set_envcolour(255, 255, 255, 255);
+        else { fov_slider(); print_set_envcolour(255, 255, 95, 255); }
+    } else print_set_envcolour(127, 127, 127, 255);
+
+    print_small_text_light(x, y, config, PRINT_ALL, PRINT_ALL, FONT_VANILLA);
+    if (x >= 160) { y += 12; } (x < 160) ? (x += 160) : (x -= 160);
+
+    (gConfigScroll == CFG_LJUMP) ? print_set_envcolour(255, 255, 255, 255) : print_set_envcolour(127, 127, 127, 255);
+
+    print_small_text_light(x, y, config, PRINT_ALL, PRINT_ALL, FONT_VANILLA);
+    if (x >= 160) { y += 12; } (x < 160) ? (x += 160) : (x -= 160);
+}
 
 #if defined(VERSION_JP) || defined(VERSION_SH)
     #define CRS_NUM_X1 93
