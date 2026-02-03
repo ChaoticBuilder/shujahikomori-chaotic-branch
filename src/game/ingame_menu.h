@@ -3,6 +3,17 @@
 
 #include <PR/ultratypes.h>
 
+extern u8 gConfigOpen;
+extern f32 sFovSlider;
+
+enum ConfigMenuIDs {
+    CFG_START,
+    CFG_WIDE,
+    CFG_FOV,
+    CFG_LJUMP,
+    CFG_END,
+};
+
 #define ASCII_TO_DIALOG(asc)                                       \
     (((asc) >= '0' && (asc) <= '9') ? ((asc) - '0') :              \
      ((asc) >= 'A' && (asc) <= 'Z') ? ((asc) - 'A' + 0x0A) :       \
@@ -53,6 +64,7 @@ extern s8 gHudFlash;
 
 extern s8 gDialogCourseActNum;
 extern s16 gInGameLanguage;
+extern u8 gLJumpToggle;
 
 struct DialogEntry {
     /*0x00*/ u32 unused;
