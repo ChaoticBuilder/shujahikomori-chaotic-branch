@@ -958,20 +958,20 @@ void update_hud_values(void) {
             }
         }
 
+#if defined(ENABLE_LIVES)
+        if (gHudDisplay.coins >= 100) {
+            gMarioState->numLives++;
+            play_sound(SOUND_GENERAL_COLLECT_1UP, gGlobalSoundSource);
+            gMarioState->numCoins -= 100;
+            gHudDisplay.coins -= 100;
+        }
+#endif
+
 #ifdef ENABLE_LIVES
         if (gMarioState->numLives > MAX_NUM_LIVES) {
             gMarioState->numLives = MAX_NUM_LIVES;
         }
 #endif
-
-        if (gMarioState->numCoins > MAX_NUM_COINS) {
-            gMarioState->numCoins = MAX_NUM_COINS;
-        }
-
-        if (gHudDisplay.coins > MAX_NUM_COINS) {
-            gHudDisplay.coins = MAX_NUM_COINS;
-        }
-
         gHudDisplay.stars = gMarioState->numStars;
         gHudDisplay.lives = gMarioState->numLives;
         gHudDisplay.keys = gMarioState->numKeys;
@@ -1241,8 +1241,6 @@ s32 init_level(void) {
     sTransitionTimer = 0;
     sSpecialWarpDest = WARP_SPECIAL_NONE;
 
-    g100CoinStarSpawned = FALSE;
-
     // NOTE: gStarModelLastCollected reset here as a safety to prevent possible UB if assigned a model used
     // in a non-global group. This checked can be removed as needed.
     if (gStarModelLastCollected != MODEL_BOWSER_KEY
@@ -1385,8 +1383,6 @@ s32 lvl_set_current_level(UNUSED s16 initOrUpdate, s32 levelNum) {
     }
 
     if (gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3) {
-        gMarioState->numCoins = 0;
-        gHudDisplay.coins = 0;
         gCurrCourseStarFlags =
             save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_NUM_TO_INDEX(gCurrCourseNum));
     }
