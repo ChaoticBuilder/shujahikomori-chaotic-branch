@@ -135,7 +135,7 @@ endif
 #==============================================================================#
 
 # Default non-gcc opt flags
-DEFAULT_OPT_FLAGS = -Ofast -falign-functions=32
+DEFAULT_OPT_FLAGS = -Os -ffinite-math-only -fno-signed-zeros -fno-math-errno
 # Note: -fno-associative-math is used here to suppress warnings, ideally we would enable this as an optimization but
 # this conflicts with -ftrapping-math apparently.
 # TODO: Figure out how to allow -fassociative-math to be enabled
@@ -503,8 +503,20 @@ endif
 C_DEFINES := $(foreach d,$(DEFINES),-D$(d))
 DEF_INC_CFLAGS := $(foreach i,$(INCLUDE_DIRS),-I$(i)) $(C_DEFINES)
 
+# Prefer gcc's cpp if installed on the system
+ifneq (,$(call find-command,clang))
+  CPP     := clang
+  CPPFLAGS := -E -P -x c -Wno-trigraphs $(DEF_INC_CFLAGS)
+else ifneq (,$(call find-command,cpp-10))
+  CPP     := cpp-10
+  CPPFLAGS := -P -Wno-trigraphs $(DEF_INC_CFLAGS)
+else
+  CPP     := cpp
+  CPPFLAGS := -P -Wno-trigraphs $(DEF_INC_CFLAGS)
+endif
+
 # C compiler options
-CFLAGS = -G 0 $(OPT_FLAGS) $(TARGET_CFLAGS) $(MIPSISET) $(DEF_INC_CFLAGS)
+CFLAGS = -std=gnu17 -G 0 $(OPT_FLAGS) $(TARGET_CFLAGS) $(MIPSISET) $(DEF_INC_CFLAGS)
 ifeq ($(COMPILER),gcc)
   CFLAGS += -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -fno-PIC -mno-abicalls -fno-strict-aliasing -fno-inline-functions -ffreestanding -fwrapv -Wall -Wextra
   CFLAGS += -Wno-missing-braces
@@ -518,9 +530,6 @@ ASMFLAGS = -G 0 $(OPT_FLAGS) $(TARGET_CFLAGS) -mips3 $(DEF_INC_CFLAGS) -mno-shar
 
 ASFLAGS     := -march=vr4300 -mabi=32 $(foreach i,$(INCLUDE_DIRS),-I$(i)) $(foreach d,$(DEFINES),--defsym $(d))
 RSPASMFLAGS := $(foreach d,$(DEFINES),-definelabel $(subst =, ,$(d)))
-
-# C preprocessor flags
-CPPFLAGS := -P -Wno-trigraphs $(DEF_INC_CFLAGS)
 
 #==============================================================================#
 # Miscellaneous Tools                                                          #

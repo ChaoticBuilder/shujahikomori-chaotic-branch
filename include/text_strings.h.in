@@ -86,6 +86,9 @@
 #define TEXT_HUD_PRESS_L _("PRESS L TO SWITCH")
 #endif
 
+#define TEXT_CONFIG_OPEN _("OPEN CONFIG")
+#define TEXT_CONFIG_CLOSE _("PRESS R TO CLOSE CONFIG")
+
 #if defined(VERSION_JP) || defined(VERSION_SH)
 
 /**
