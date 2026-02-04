@@ -272,7 +272,6 @@ s32 act_sleeping(struct MarioState *m) {
 
         case ACT_SLEEPING_STATE_LYING:
             set_mario_animation(m, MARIO_ANIM_SLEEP_LYING);
-            play_sound_if_no_flag(m, SOUND_MARIO_SNORING3, MARIO_ACTION_SOUND_PLAYED);
             break;
     }
     return FALSE;
