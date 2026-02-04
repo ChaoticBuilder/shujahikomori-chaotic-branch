@@ -14,6 +14,7 @@
 #include "memory.h"
 #include "behavior_data.h"
 #include "rumble_init.h"
+#include "ingame_menu.h"
 
 #include "config.h"
 

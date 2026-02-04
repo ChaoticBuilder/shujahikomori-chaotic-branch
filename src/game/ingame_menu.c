@@ -42,6 +42,8 @@ s8 gRedCoinsCollected;
 u8 gConfigOpen = FALSE;
 u8 gConfigScroll = 1;
 u8 gHighlightToggle = FALSE;
+u8 textConfigOpen[] = { TEXT_CONFIG_OPEN };
+u8 textConfigClose[] = { TEXT_CONFIG_CLOSE };
 f32 sFovSlider = 0.0f;
 
 #if MULTILANG
@@ -1533,10 +1535,9 @@ void render_pause_red_coins(void) {
 u8 gLJumpToggle = TRUE;
 
 void config_options_scroll(void) {
-    if (gHighlightToggle)
-        return;
+    if (gHighlightToggle) return;
 
-    if (gGlobalTimer % 4 == 0) {
+    if ((gGlobalTimer & 3) == 0) {
         if (gPlayer1Controller->buttonDown & L_JPAD || gPlayer1Controller->rawStickX <= -16.0f) {
             gConfigScroll--; play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
         }
@@ -1566,9 +1567,7 @@ void config_options(void) {
         }
 #endif
         if (gConfigScroll == CFG_FOV) gHighlightToggle ^= 1;
-        if (gConfigScroll == CFG_LJUMP) {
-            gLJumpToggle ^= 1;
-        }
+        if (gConfigScroll == CFG_LJUMP) gLJumpToggle ^= 1;
     }
 }
 
@@ -1593,9 +1592,9 @@ void fov_slider(void) {
 }
 
 void config_options_box(void) {
-    char config[32];
     config_options_scroll();
     config_options();
+    char config[32];
     u8 x = 32;
     u8 y = 32;
 
@@ -1618,6 +1617,7 @@ void config_options_box(void) {
     print_small_text_light(x, y, config, PRINT_ALL, PRINT_ALL, FONT_VANILLA);
     if (x >= 160) { y += 12; } (x < 160) ? (x += 160) : (x -= 160);
 
+    (!gLJumpToggle) ? sprintf(config, "Fast L-Jump: Off") : sprintf(config, "Fast L-Jump: On");
     (gConfigScroll == CFG_LJUMP) ? print_set_envcolour(255, 255, 255, 255) : print_set_envcolour(127, 127, 127, 255);
 
     print_small_text_light(x, y, config, PRINT_ALL, PRINT_ALL, FONT_VANILLA);
@@ -1827,8 +1827,6 @@ void render_pause_castle_course_stars(s16 x, s16 y, s16 fileIndex, s16 courseInd
 void render_pause_castle_main_strings(s16 x, s16 y) {
     void **courseNameTbl = segmented_to_virtual(languageTable[gInGameLanguage][1]);
 
-    u8 textCoin[] = { TEXT_COIN_X };
-
     void *courseName;
 
     u8 strVal[8];
@@ -1894,10 +1892,19 @@ s8 gHudFlash = HUD_FLASH_NONE;
 s32 render_pause_courses_and_castle(void) {
     s16 index;
 
-#ifdef PUPPYCAM
-    puppycam_check_pause_buttons();
-    if (!gPCOptionOpen) {
-#endif
+    if (gPlayer1Controller->buttonPressed & R_TRIG) gConfigOpen ^= 1;
+
+/*     if (gConfigOpen) {
+        prepare_blank_box();
+        render_blank_box(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 191);
+        finish_blank_box();
+        config_options_box();
+        
+        gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
+        gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
+        print_generic_string(93, 8, textConfigClose);
+        gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
+        goto menuEnd; } */
     switch (gDialogBoxState) {
         case DIALOG_STATE_OPENING:
             gDialogLineNum = MENU_OPT_DEFAULT;
@@ -1962,20 +1969,11 @@ s32 render_pause_courses_and_castle(void) {
             }
             break;
     }
-#if defined(WIDE) && !defined(PUPPYCAM)
-        render_widescreen_setting();
-#endif
-    if (gDialogTextAlpha < 250) {
-        gDialogTextAlpha += 25;
-    }
-#ifdef PUPPYCAM
-    } else {
-        shade_screen();
-        puppycam_display_options();
+//menuEnd:
+    if (gDialogTextAlpha < 255) {
+        gDialogTextAlpha += 17;
     }
 
-    puppycam_render_option_text();
-#endif
     return MENU_OPT_NONE;
 }
 
