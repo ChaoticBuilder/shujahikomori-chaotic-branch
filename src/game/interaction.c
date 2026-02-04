@@ -736,14 +736,6 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
     m->breathCounter += (4 * obj->oDamageOrCoinValue);
 #endif
     obj->oInteractStatus = INT_STATUS_INTERACTED;
-#ifdef ENABLE_LIVES
-    if (gMarioState->numCoins >= 100) {
-        gMarioState->numLives++;
-        play_sound(SOUND_GENERAL_COLLECT_1UP, gGlobalSoundSource);
-        gMarioState->numCoins -= 100;
-        gHudDisplay.coins -= 100;
-    }
-#endif
 #if ENABLE_RUMBLE
     if (obj->oDamageOrCoinValue >= 2) {
         queue_rumble_data(5, 80);
