@@ -591,7 +591,7 @@ s32 act_side_flip(struct MarioState *m) {
 
 s32 act_wall_kick_air(struct MarioState *m) {
     if (m->input & INPUT_B_PRESSED) {
-        return set_mario_action(m, ACT_DIVE, 0);
+        return set_mario_action(m, m->forwardVel > 28.0f ? ACT_DIVE : ACT_JUMP_KICK, 0);
     }
 
     if (m->input & INPUT_Z_PRESSED) {
@@ -1610,6 +1610,8 @@ s32 act_jump_kick(struct MarioState *m) {
         set_mario_animation(m, MARIO_ANIM_AIR_KICK);
         m->actionState = ACT_STATE_JUMP_KICK_KICKING;
     }
+    if (m->input & INPUT_A_PRESSED)
+        return set_mario_action(m, ACT_DIVE, 0);
 
     s32 animFrame = m->marioObj->header.gfx.animInfo.animFrame;
     if (animFrame == 0) {

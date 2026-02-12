@@ -821,9 +821,7 @@ u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actionArg) {
             break;
 
         case ACT_DIVE:
-            if ((forwardVel = m->forwardVel + 15.0f) > 48.0f) {
-                forwardVel = 48.0f;
-            }
+            forwardVel = m->forwardVel + 30.0f;
             mario_set_forward_vel(m, forwardVel);
             break;
 

@@ -75,6 +75,8 @@ const LevelScript level_castle_grounds_entry[] = {
 		OBJECT(MODEL_CASTLE_CASTLE_DOOR, 1210, 0, 2863, 0, 0, 0, (0x1E << 16), bhvDoorWarp),
 		OBJECT(MODEL_CASTLE_CASTLE_DOOR, 2436, 0, 949, 0, 0, 0, (0x1E << 16), bhvDoor),
 		OBJECT(MODEL_CASTLE_CASTLE_DOOR, 7831, -270, 1724, 0, 90, 0, (0x1E << 16), bhvDoor),
+		OBJECT(MODEL_CASTLE_CASTLE_DOOR, 1373, 530, 1418, 0, -180, 0, (0x1C << 16), bhvDoor),
+		OBJECT(MODEL_CASTLE_CASTLE_DOOR, 1217, 530, 1418, 0, 0, 0, (0x1E << 16), bhvDoor),
 		MARIO_POS(0x01, 0, 1225, 682, 2012),
 		OBJECT(MODEL_NONE, 1189, 200, 2272, 0, 0, 0, 0x000A0000, bhvSpinAirborneWarp),
 		OBJECT(MODEL_YELLOW_COIN, 1522, 319, 1681, 0, 0, 0, (0x1E << 16), bhvYellowCoin),
