@@ -3159,7 +3159,6 @@ void reset_camera(struct Camera *c) {
     set_fov_function(CAM_FOV_DEFAULT);
     sFOVState.fov = 45.f;
     sFOVState.fovOffset = 0.f;
-    sFOVState.unusedIsSleeping = 0;
     sFOVState.shakeAmplitude = 0.f;
     sFOVState.shakePhase = 0;
     sObjectCutscene = CUTSCENE_NONE;
