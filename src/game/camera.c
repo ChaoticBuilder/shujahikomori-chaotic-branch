@@ -867,7 +867,7 @@ s32 update_radial_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
 /**
  * Update the camera during 8 directional mode
  */
-s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
+s32 update_8_directions_camera(UNUSED struct Camera *c, Vec3f focus, Vec3f pos) {
     s16 camYaw = s8DirModeBaseYaw + s8DirModeYawOffset;
     s16 pitch = look_down_slopes(camYaw);
     f32 posY;
@@ -2862,7 +2862,6 @@ void update_lakitu(struct Camera *c) {
 void update_camera(struct Camera *c) {
     PROFILER_GET_SNAPSHOT_TYPE(PROFILER_DELTA_COLLISION);
     gCamera = c;
-    update_camera_hud_status(c);
     if (c->cutscene == CUTSCENE_NONE
 #ifdef PUPPYCAM
         && !gPuppyCam.enabled
@@ -3186,7 +3185,6 @@ void init_camera(struct Camera *c) {
     gLakituState.focVSpeed = 0.3f;
     gLakituState.roll = 0;
     gLakituState.keyDanceRoll = 0;
-    gLakituState.unused = 0;
     sStatusFlags &= ~CAM_FLAG_SMOOTH_MOVEMENT;
     vec3_zero(sCastleEntranceOffset);
     vec3_zero(sPlayer2FocusOffset);
@@ -3614,10 +3612,6 @@ void set_handheld_shake(u8 mode) {
             sHandheldShakeMag = 0x1000;
             sHandheldShakeInc = 0.1f;
             break;
-        case HAND_CAM_SHAKE_UNUSED: // Never used
-            sHandheldShakeMag = 0x600;
-            sHandheldShakeInc = 0.07f;
-            break;
         case HAND_CAM_SHAKE_HANG_OWL: // exactly the same as UNUSED...
             sHandheldShakeMag = 0x600;
             sHandheldShakeInc = 0.07f;
@@ -3729,30 +3723,6 @@ s32 find_c_buttons_pressed(u16 currentState, u16 buttonsPressed, u16 buttonsDown
     }
 
     return currentState;
-}
-
-/**
- * Determine which icon to show on the HUD
- */
-s32 update_camera_hud_status(struct Camera *c) {
-    s16 status = CAM_STATUS_NONE;
-
-    if (c->cutscene != CUTSCENE_NONE
-        || ((gPlayer1Controller->buttonDown & R_TRIG) && cam_select_alt_mode(0) == CAM_SELECTION_FIXED)) {
-        status |= CAM_STATUS_FIXED;
-    } else if (set_cam_angle(0) == CAM_ANGLE_MARIO) {
-        status |= CAM_STATUS_MARIO;
-    } else {
-        status |= CAM_STATUS_LAKITU;
-    }
-    if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) {
-        status |= CAM_STATUS_C_DOWN;
-    }
-    if (gCameraMovementFlags & CAM_MOVE_C_UP_MODE) {
-        status |= CAM_STATUS_C_UP;
-    }
-    set_hud_camera_status(status);
-    return status;
 }
 
 /**
@@ -11029,6 +10999,7 @@ Gfx *geo_camera_fov(s32 callContext, struct GraphNode *g, UNUSED void *context) 
     }
 
     perspective->fov = sFOVState.fov;
+    perspective->fov += sFovSlider;
     shake_camera_fov(perspective);
     return NULL;
 }

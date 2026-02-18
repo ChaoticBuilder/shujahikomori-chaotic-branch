@@ -1894,7 +1894,7 @@ s32 render_pause_courses_and_castle(void) {
 
     if (gPlayer1Controller->buttonPressed & R_TRIG) gConfigOpen ^= 1;
 
-/*     if (gConfigOpen) {
+     if (gConfigOpen) {
         prepare_blank_box();
         render_blank_box(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 191);
         finish_blank_box();
@@ -1904,7 +1904,7 @@ s32 render_pause_courses_and_castle(void) {
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
         print_generic_string(93, 8, textConfigClose);
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
-        goto menuEnd; } */
+        goto menuEnd; }
     switch (gDialogBoxState) {
         case DIALOG_STATE_OPENING:
             gDialogLineNum = MENU_OPT_DEFAULT;
@@ -1924,7 +1924,7 @@ s32 render_pause_courses_and_castle(void) {
 
         case DIALOG_STATE_VERTICAL:
             shade_screen();
-            render_pause_my_score_coins();
+            //render_pause_my_score_coins();
             render_pause_red_coins();
 #ifndef DISABLE_EXIT_COURSE
 #ifdef EXIT_COURSE_WHILE_MOVING
@@ -1969,7 +1969,7 @@ s32 render_pause_courses_and_castle(void) {
             }
             break;
     }
-//menuEnd:
+menuEnd:
     if (gDialogTextAlpha < 255) {
         gDialogTextAlpha += 17;
     }
@@ -2020,31 +2020,6 @@ void print_hud_course_complete_coins(s16 x, s16 y) {
     print_hud_lut_string(HUD_LUT_GLOBAL, x + 32, y, courseCompleteCoinsStr);
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
-
-    if (gCourseCompleteCoins >= gHudDisplay.coins) {
-        gCourseCompleteCoinsEqual = TRUE;
-        gCourseCompleteCoins = gHudDisplay.coins;
-
-        if (gGotFileCoinHiScore) {
-            print_hud_course_complete_string(HUD_PRINT_HISCORE);
-        }
-    } else {
-        if ((gCourseDoneMenuTimer & 1) || gHudDisplay.coins > 70) {
-            gCourseCompleteCoins++;
-            play_sound(SOUND_MENU_YOSHI_GAIN_LIVES, gGlobalSoundSource);
-
-#ifdef ENABLE_LIVES
-            if (gCourseCompleteCoins && ((gCourseCompleteCoins % 50) == 0)) {
-                play_sound(SOUND_GENERAL_COLLECT_1UP, gGlobalSoundSource);
-                gMarioState->numLives++;
-            }
-#endif
-        }
-
-        if ((gHudDisplay.coins == gCourseCompleteCoins) && gGotFileCoinHiScore) {
-            play_sound(SOUND_MENU_HIGH_SCORE, gGlobalSoundSource);
-        }
-    }
 }
 
 void play_star_fanfare_and_flash_hud(s32 arg, u8 starNum) {
@@ -2074,7 +2049,6 @@ void render_course_complete_lvl_info_and_hud_str(void) {
     void **courseNameTbl = segmented_to_virtual(languageTable[gInGameLanguage][1]);
 
     if (gLastCompletedCourseNum <= COURSE_STAGES_MAX) { // Main courses
-        print_hud_course_complete_coins(118, 103);
         play_star_fanfare_and_flash_hud(HUD_FLASH_STARS, (1 << (gLastCompletedStarNum - 1)));
         name = segmented_to_virtual(actNameTbl[COURSE_NUM_TO_INDEX(gLastCompletedCourseNum) * 6 + gLastCompletedStarNum - 1]);
 
@@ -2107,34 +2081,12 @@ void render_course_complete_lvl_info_and_hud_str(void) {
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 
         print_hud_course_complete_string(HUD_PRINT_CONGRATULATIONS);
-        print_hud_course_complete_coins(118, 111);
         play_star_fanfare_and_flash_hud(HUD_FLASH_KEYS, 0);
         return;
     } else { // Castle secret stars
         name = segmented_to_virtual(actNameTbl[COURSE_STAGES_MAX * 6]);
-
-        print_hud_course_complete_coins(118, 103);
         play_star_fanfare_and_flash_hud(HUD_FLASH_STARS, 1 << (gLastCompletedStarNum - 1));
     }
-
-    // Print star glyph
-    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
-
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-    print_hud_lut_string(HUD_LUT_GLOBAL, 55, 77, textSymStar);
-
-    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
-
-    // Print act name and catch text
-    gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-
-    gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, gDialogTextAlpha);
-    print_generic_string(76, 145, name);
-
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-    print_generic_string(74, 147, name);
-
-    gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 }
 
 #define X_VAL9 x
@@ -2171,7 +2123,7 @@ s32 render_course_complete_screen(void) {
     switch (gDialogBoxState) {
         case DIALOG_STATE_OPENING:
             render_course_complete_lvl_info_and_hud_str();
-            if (gCourseDoneMenuTimer > 100 && gCourseCompleteCoinsEqual) {
+            if (gCourseDoneMenuTimer > 100) {
                 gDialogBoxState = DIALOG_STATE_VERTICAL;
                 level_set_transition(-1, NULL);
                 gDialogTextAlpha = 0;
@@ -2191,7 +2143,6 @@ s32 render_course_complete_screen(void) {
                 gMenuMode = MENU_MODE_NONE;
                 gCourseDoneMenuTimer = 0;
                 gCourseCompleteCoins = 0;
-                gCourseCompleteCoinsEqual = FALSE;
                 gHudFlash = HUD_FLASH_NONE;
 
                 return gDialogLineNum;
