@@ -34,7 +34,6 @@ struct SaveFile {
     // Star flags for each course.
     u8 courseStars[COURSE_MAX];
     u8 extraStars[EXTRA_STARS_ARRAY];
-    u8 courseCoinScores[COURSE_STAGES_COUNT];
     struct SaveBlockSignature signature; // 32 bits
 };
 
